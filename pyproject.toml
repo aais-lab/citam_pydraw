@@ -1,0 +1,10 @@
+[project]
+name = "IP"
+version = '1.4.8'
+authors = [  { name="Nao Yamanouchi" },]
+description = "CIT Introduction Programming class lib"
+license = {text = "3-Clause BSD License"}
+requires-python = ">=3.10.5"
+
+[tool.poetry.group.dev.dependencies]
+tkinter = "^8.6"

@@ -1,0 +1,10 @@
+X = -100
+Y = -100
+pX = 0
+pY = 0
+pressX = 0
+pressY = 0
+clickX = 0
+clickY = 0
+mouseButton = ""
+isPressed = False
