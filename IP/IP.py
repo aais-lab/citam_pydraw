@@ -1,5 +1,5 @@
 ###
-# プログラミング基礎 v1.0.0
+# プログラミング基礎 v1.4.8
 ###
 from collections.abc import Callable, Iterable, Mapping
 import tkinter
@@ -34,9 +34,13 @@ def _TraceBack(level=2,limit=0):
 # animation
 _RATE = 30
 
+# window
+MAX_HEIGHT = 700
+MAX_WIDTH = 1000
+
 # canvas
 _ROOT = None
-_CANVAS = None
+CANVAS = None
 _CANVAS_WIDTH = 500
 _CANVAS_HEIGHT = 500
 _CANVAS_JOBID = None
@@ -120,7 +124,7 @@ def animation(isAnimated):
             func(*args, **kwargs)
             global _CANVAS_JOBID
             if _IS_DRAW_MOVED:
-                _CANVAS_JOBID = _CANVAS.after(_RATE, _ani(func))
+                _CANVAS_JOBID = CANVAS.after(_RATE, _ani(func))
         return _reg
     return _ani
 
@@ -130,7 +134,7 @@ def mouseMoved(func):
         def tmp():
             if 0 < mouse.X < _CANVAS_WIDTH and 0 < mouse.Y < _CANVAS_HEIGHT:
                 _executor.submit(lambda:func(*args, **kwargs))
-        _CANVAS.bind("<Motion>", tmp())
+        CANVAS.bind("<Motion>", tmp())
     return _reg
 
 def mousePressed(func):
@@ -140,7 +144,7 @@ def mousePressed(func):
             if mouse.isPressed  and not _IS_MOUSE_PRESSED_BEFORE:
                 _executor.submit(lambda:func(*args, **kwargs))
                 _IS_MOUSE_PRESSED_BEFORE = True
-        _CANVAS.bind("<ButtonPress>", tmp())
+        CANVAS.bind("<ButtonPress>", tmp())
     return _reg
 
 def mouseClicked(func):
@@ -150,7 +154,7 @@ def mouseClicked(func):
             if _IS_MOUSE_PRESSED_BEFORE:
                 _executor.submit(lambda:func(*args, **kwargs))
                 _IS_MOUSE_PRESSED_BEFORE = False
-        _CANVAS.bind("<ButtonRelease>", tmp())
+        CANVAS.bind("<ButtonRelease>", tmp())
     return _reg
 
 def mouseDragged(func):
@@ -159,7 +163,7 @@ def mouseDragged(func):
             if mouse.isPressed:
                 func(*args, **kwargs)
                 mouse.pressX, mouse.pressY = mouse.X, mouse.Y
-        _CANVAS.bind("<Motion>", tmp())
+        CANVAS.bind("<Motion>", tmp())
     return _reg
 
 def keyPressed(func):
@@ -167,7 +171,7 @@ def keyPressed(func):
         def tmp():
             if keyboard.isPressed:
                 _executor.submit(lambda:func(*args, **kwargs))
-        _CANVAS.bind("<KeyPressed>", tmp())
+        CANVAS.bind("<KeyPressed>", tmp())
     return _reg
 
 def keyReleased(func):
@@ -177,11 +181,16 @@ def keyReleased(func):
             if _IS_KEY_PRESSED_BEFORE and not keyboard.isPressed:
                 _executor.submit(lambda:func(*args, **kwargs))
                 _IS_KEY_PRESSED_BEFORE = False
-        _CANVAS.bind("<KeyRelease>", tmp())
+        CANVAS.bind("<KeyRelease>", tmp())
     return _reg
 
 
 # callable function
+# NOTE:ウィンドウの最大サイズを変化できるようにしてほしいという要望があったため追加
+def windowMaxSize(width, height):
+    global MAX_WIDTH, MAX_HEIGHT
+    MAX_WIDTH, MAX_HEIGHT  = width, height
+
 def colorMode(colorMode):
     if colorMode not in ["HSV", "RGB"]:
         if not _IS_ALL_TRACE :_TraceBack()
@@ -190,24 +199,23 @@ def colorMode(colorMode):
     COLOR_MORD = colorMode
     
 def color(v1, v2, v3):
+    # NOTE: 先生に相談したところ、floatは許容しないとのことだったため修正
+    # NOTE: 値のいずれかのみの型が異なっていた場合に正しくerrorを吐かなかったため修正
+    if type(v1)!=int or type(v2)!=int or type(v3)!=int:
+        if not _IS_ALL_TRACE : _TraceBack()
+        raise ColorError(f"color({v1},{v2},{v3}) で指定されたいずれかの値が整数ではありません")
     if v1<0 or v2<0 or v3<0:
         if not _IS_ALL_TRACE : _TraceBack()
         raise ColorError("色の指定に0以下は使用できません")
     if COLOR_MORD == "RGB":
-        if ([type(v1),type(v2),type(v3)] == [int,int,int] and (v1>255 or v2>255 or v3>255)) or ([type(v1),type(v2),type(v3)] == [float,float,float] and (v1>1 or v2>1 or v3>1)):
+        if v1>255 or v2>255 or v3>255:
             if not _IS_ALL_TRACE : _TraceBack()
             raise ColorError(f"color({v1},{v2},{v3}) はRGBで指定可能な範囲を超えています")
-        v1 = int(v1*255) if type(v1)==float else v1
-        v2 = int(v2*255) if type(v2)==float else v2
-        v3 = int(v3*255) if type(v3)==float else v3
     else:
-        if ([type(v1),type(v2),type(v3)] == [int,int,int] and (v1>100 or v2>100 or v3>100)) or ([type(v1),type(v2),type(v3)] == [float,float,float] and (v1>1 or v2>1 or v3>1)):
+        if v1>100 or v2>100 or v3>100:
             if not _IS_ALL_TRACE : _TraceBack()
             raise ColorError(f"color({v1},{v2},{v3}) はHSVで指定可能な範囲を超えています")
-        v1 = v1/100 if type(v1)==int else v1
-        v2 = v2/100 if type(v2)==int else v2
-        v3 = v3/100 if type(v3)==int else v3
-        v1, v2, v3 = colorsys.hsv_to_rgb(v1, v2, v3)
+        v1, v2, v3 = colorsys.hsv_to_rgb(v1/100, v2/100, v3/100)
         v1, v2, v3 = int(v1*255), int(v2*255), int(v3*255)
     return "#"+format(v1,'02x')+format(v2,'02x')+format(v3,'02x')
 
@@ -257,7 +265,7 @@ def availableFonts(fontname='all'):
         root.mainloop()
     
 def clear():
-    _CANVAS.delete(_TAG)
+    CANVAS.delete(_TAG)
 
 def stop():
     global _IS_DRAW_MOVED
@@ -305,18 +313,17 @@ def _calc_rotate(basePoint, movePoint, angle):
 class Window:
     def __init__(self, width=500, height=500, background="white"):
         _checkColor(background)
-        global _CANVAS, _CANVAS_WIDTH, _CANVAS_HEIGHT, _FONTS, _ROOT
+        global CANVAS, _CANVAS_WIDTH, _CANVAS_HEIGHT, _FONTS, _ROOT
         _CANVAS_WIDTH = width
         _CANVAS_HEIGHT = height
-        
         _ROOT = tkinter.Tk()
         _FONTS = list(font.families(_ROOT))
         _ROOT.resizable(width=False, height=False)
-        _ROOT.wm_maxsize(width=1000,height=700)
+        _ROOT.wm_maxsize(width=MAX_WIDTH,height=MAX_HEIGHT)
         _ROOT.geometry('{}x{}+0+0'.format(str(_CANVAS_WIDTH),str(_CANVAS_HEIGHT)))
-        _CANVAS = _Canvas_(_ROOT, background=background)
-        _CANVAS.pack(expand=True, fill=tkinter.BOTH)
-        
+        CANVAS = _Canvas_(_ROOT, background=background)
+        CANVAS.pack(expand=True, fill=tkinter.BOTH)
+    
     def size(self, width, height):
         global _CANVAS_WIDTH, _CANVAS_HEIGHT
         _CANVAS_HEIGHT = height
@@ -331,7 +338,7 @@ class Window:
             if not _IS_ALL_TRACE : _TraceBack()
             raise BackgroundException("背景色に画像を指定することはできません") from None
         _checkColor(background)
-        _CANVAS.configure(background=background)
+        CANVAS.configure(background=background)
         
     def show(self):
         _ROOT.mainloop()
@@ -354,7 +361,7 @@ class _Canvas_(tkinter.Canvas):
         preMouseX.append(mouse.X)
         preMouseY.append(mouse.Y)
         if len(preMouseY) > 3:
-            mouse.pX, mouse.pY = preMouseX.popleft(), preMouseY.popleft()
+            mouse.beforeX, mouse.beforeY = preMouseX.popleft(), preMouseY.popleft()
         mouse.X, mouse.Y = event.x, event.y
         
     def mousePress(self, event):
@@ -373,7 +380,11 @@ class _Canvas_(tkinter.Canvas):
         _IS_MOUSE_PRESSED_BEFORE = True
         
     def keyPress(self, event):
-        keyboard.key, keyboard.code, keyboard.char = event.keysym, event.keycode, event.char
+        keyboard.key, keyboard.char = event.keysym, event.char
+        try:
+            keyboard.code = ord(event.keysym)
+        except :
+            keyboard.code = event.keycode
         keyboard.isPressed = True
         global _IS_KEY_PRESSED_BEFORE
         _IS_KEY_PRESSED_BEFORE = False
@@ -395,29 +406,29 @@ class Figure:
         
     def fill(self, color):
         self.fill_color = color
-        _CANVAS.itemconfigure(self.figure, fill=self.fill_color)
+        CANVAS.itemconfigure(self.figure, fill=self.fill_color)
         
     def noFill(self):
         self.fill_color = ""
-        _CANVAS.itemconfigure(self.figure, fill=self.fill_color)
+        CANVAS.itemconfigure(self.figure, fill=self.fill_color)
         
     def outlineFill(self, color):
         self.outline_color = color
-        _CANVAS.itemconfigure(self.figure, outline=self.outline_color)
+        CANVAS.itemconfigure(self.figure, outline=self.outline_color)
         
     def noOutline(self):
         self.outline_color = ""
-        _CANVAS.itemconfigure(self.figure, outline=self.outline_color)
+        CANVAS.itemconfigure(self.figure, outline=self.outline_color)
         
     def outlineWidth(self, width):
         self.outline_width = width
-        _CANVAS.itemconfigure(self.figure, width=self.outline_width)
+        CANVAS.itemconfigure(self.figure, width=self.outline_width)
         
     def changeBasePoint(self, base_x, base_y):
         self.rotate_point.update({"x":base_x, "y":base_y})
         
     def delete(self):
-        _CANVAS.delete(self.figure)
+        CANVAS.delete(self.figure)
  
 # figure class
 class Line(Figure):
@@ -426,16 +437,16 @@ class Line(Figure):
         self.point1 = {"x":startX, "y":startY}
         self.point2 = {"x":endX, "y":endY}
         self.line_weight = lineWeight
-        self.figure = _CANVAS.create_line(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], fill=self.fill_color, width=self.line_weight, tags=_TAG)
+        self.figure = CANVAS.create_line(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], fill=self.fill_color, width=self.line_weight, tags=_TAG)
         
     def lineWeight(self, lineWeight):
         self.line_weight = lineWeight
-        _CANVAS.itemconfigure(self.figure, width=self.line_weight)
+        CANVAS.itemconfigure(self.figure, width=self.line_weight)
         
     def rotate(self, angle):
         self.point1.update(_calc_rotate(self.rotate_point, self.point1, angle))
         self.point2.update(_calc_rotate(self.rotate_point, self.point2, angle))
-        _CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"])
+        CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"])
 
     def outlineFill(self, color):
         if not _IS_ALL_TRACE : _TraceBack()
@@ -453,13 +464,13 @@ class Triangle(Figure):
         self.point1 = {"x":x1, "y":y1}
         self.point2 = {"x":x2, "y":y2}
         self.point3 = {"x":x3, "y":y3}
-        self.figure = _CANVAS.create_polygon(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], fill=self.fill_color, outline=self.outline_color, width=self.outline_width, tags=_TAG)
+        self.figure = CANVAS.create_polygon(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], fill=self.fill_color, outline=self.outline_color, width=self.outline_width, tags=_TAG)
 
     def rotate(self, angle):
         self.point1.update(_calc_rotate(self.rotate_point, self.point1, angle))
         self.point2.update(_calc_rotate(self.rotate_point, self.point2, angle))
         self.point3.update(_calc_rotate(self.rotate_point, self.point3, angle))
-        _CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"])
+        CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"])
 
 class Rectangle(Figure):
     def __init__(self, x, y, width, height):
@@ -469,14 +480,14 @@ class Rectangle(Figure):
         self.point3 = {"x":x+width, "y":y+height}
         self.point4 = {"x":x, "y":y+height}
 
-        self.figure = _CANVAS.create_polygon(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], self.point4["x"], self.point4["y"], fill=self.fill_color, outline=self.outline_color, width=self.outline_width, tags=_TAG)
+        self.figure = CANVAS.create_polygon(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], self.point4["x"], self.point4["y"], fill=self.fill_color, outline=self.outline_color, width=self.outline_width, tags=_TAG)
         
     def rotate(self, angle):
         self.point1.update(_calc_rotate(self.rotate_point, self.point1, angle))
         self.point2.update(_calc_rotate(self.rotate_point, self.point2, angle))
         self.point3.update(_calc_rotate(self.rotate_point, self.point3, angle))
         self.point4.update(_calc_rotate(self.rotate_point, self.point4, angle))
-        _CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], self.point4["x"], self.point4["y"])
+        CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], self.point4["x"], self.point4["y"])
         
 class Quad(Figure):
     def __init__(self, x1, y1, x2, y2, x3, y3, x4, y4):
@@ -486,14 +497,14 @@ class Quad(Figure):
         self.point3 = {"x":x3, "y":y3}
         self.point4 = {"x":x4, "y":y4}
         
-        self.figure = _CANVAS.create_polygon(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], self.point4["x"], self.point4["y"], fill=self.fill_color, outline=self.outline_color, width=self.outline_width, tags=_TAG)
+        self.figure = CANVAS.create_polygon(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], self.point4["x"], self.point4["y"], fill=self.fill_color, outline=self.outline_color, width=self.outline_width, tags=_TAG)
 
     def rotate(self, angle):
         self.point1.update(_calc_rotate(self.rotate_point, self.point1, angle))
         self.point2.update(_calc_rotate(self.rotate_point, self.point2, angle))
         self.point3.update(_calc_rotate(self.rotate_point, self.point3, angle))
         self.point4.update(_calc_rotate(self.rotate_point, self.point4, angle))
-        _CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], self.point4["x"], self.point4["y"])
+        CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], self.point4["x"], self.point4["y"])
 
 class Ellipse(Figure):
     def __init__(self, x, y, width, height):
@@ -502,13 +513,13 @@ class Ellipse(Figure):
         self.size = {"width":width, "height":height}
         self.point1 = {"x":x-width/2, "y":y-height/2}
         self.point2 = {"x":x+width/2, "y":y+height/2}
-        self.figure = _CANVAS.create_oval(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], fill=self.fill_color, outline=self.outline_color, width=self.outline_width, tags=_TAG)
+        self.figure = CANVAS.create_oval(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], fill=self.fill_color, outline=self.outline_color, width=self.outline_width, tags=_TAG)
 
     def rotate(self, angle):
         self.figure_center_point.update(_calc_rotate(self.rotate_point, self.figure_center_point, angle))
         self.point1.update({"x":self.figure_center_point["x"]-self.size["width"]/2, "y":self.figure_center_point["y"]-self.size["height"]/2})
         self.point2.update({"x":self.figure_center_point["x"]+self.size["width"]/2, "y":self.figure_center_point["y"]+self.size["height"]/2})
-        _CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"])
+        CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"])
 
 class Point(Figure):
     def __init__(self, x, y, size):
@@ -518,20 +529,20 @@ class Point(Figure):
         self.size = size
         self.point1 = {"x":x-size/2, "y":y-size/2}
         self.point2 = {"x":x+size/2, "y":y+size/2}
-        self.figure = _CANVAS.create_oval(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], fill=self.fill_color, outline=self.outline_color, tags=_TAG)
+        self.figure = CANVAS.create_oval(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], fill=self.fill_color, outline=self.outline_color, tags=_TAG)
 
     def rotate(self, angle):
         self.figure_center_point.update(_calc_rotate(self.rotate_point, self.figure_center_point, angle))
         self.point1.update({"x":self.figure_center_point["x"]-self.size/2, "y":self.figure_center_point["y"]-self.size/2})
         self.point2.update({"x":self.figure_center_point["x"]+self.size/2, "y":self.figure_center_point["y"]+self.size/2})
-        _CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"])
+        CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"])
 
     def outlineFill(self, color):
         if not _IS_ALL_TRACE : _TraceBack()
         raise NotFoundFunction("PointでoutlineFill関数は使用できません")
     def noOutline(self):
         if not _IS_ALL_TRACE : _TraceBack()
-        raise NotFoundFunction("Pointでoutline関数は使用できません")
+        raise NotFoundFunction("PointでnoOutline関数は使用できません")
     def outlineWidth(self, width):
         if not _IS_ALL_TRACE : _TraceBack()
         raise NotFoundFunction("PointでoutlineWidth関数は使用できません")
@@ -546,13 +557,13 @@ class Arc(Figure):
         self.start_angle = startAngle
         self.interior_angle = interiorAngle
         self.outline_style = "pieslice"
-        self.figure = _CANVAS.create_arc(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], start=self.start_angle, extent=self.interior_angle, fill=self.fill_color, outline=self.outline_color, width=self.outline_width, style=self.outline_style, tags=_TAG)
+        self.figure = CANVAS.create_arc(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], start=self.start_angle, extent=self.interior_angle, fill=self.fill_color, outline=self.outline_color, width=self.outline_width, style=self.outline_style, tags=_TAG)
 
     def rotate(self, angle):
         self.figure_center_point.update(_calc_rotate(self.rotate_point, self.figure_center_point, angle))
         self.point1.update({"x":self.figure_center_point["x"]-self.size["width"]/2, "y":self.figure_center_point["y"]-self.size["height"]/2})
         self.point2.update({"x":self.figure_center_point["x"]+self.size["width"]/2, "y":self.figure_center_point["y"]+self.size["height"]/2})
-        _CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"])
+        CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"])
 
     def outlineStyle(self, style):
         styleList = ["pieslice","arc","chord"]
@@ -560,7 +571,7 @@ class Arc(Figure):
             self.outline_style = style
         else:
             raise ShapeError(f"{style}は使用可能な外枠線のスタイルではありません。扇形'pieslice',円弧'arc',円弧と弦'chord'のいずれかを指定してください。")
-        _CANVAS.itemconfigure(self.figure, style=self.outline_style)
+        CANVAS.itemconfigure(self.figure, style=self.outline_style)
 
 # text class
 class Text():
@@ -568,21 +579,21 @@ class Text():
         self.font_name = _DEFAULT_FONT
         self.fontsize = 20
         self.center_point = {"x":x, "y":y}
-        self.text = _CANVAS.create_text(x, y, text=text, font=(self.font,self.fontsize))
+        self.text = CANVAS.create_text(x, y, text=text, font=(self.font,self.fontsize))
         self.rotate_point = {"x":0, "y":0}
         
     def font(self, fontName, fontSize):
         fontName = self.font_name if fontName=="" else fontName
         if fontName not in _FONTS:
-            if not _IS_ALL_TRACE : _TraceBack(3)
+            if not _IS_ALL_TRACE : _TraceBack()
             raise FontError(f"{fontName}は使用可能なフォントではありません")
         self.font_name = fontName
         self.fontsize = fontSize
-        _CANVAS.itemconfigure(self.text,font=(self.font_name,self.fontsize))
+        CANVAS.itemconfigure(self.text,font=(self.font_name,self.fontsize))
         
     def fill(self, color):
         _checkColor(color)
-        _CANVAS.itemconfigure(self.text, fill=color)
+        CANVAS.itemconfigure(self.text, fill=color)
         
     def rotate(self, angle):
         self.center_point.update(_calc_rotate(self.rotate_point, self.center_point, angle))                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
@@ -618,8 +629,8 @@ class Image():
         
     def show(self, x, y):
         if self.image is None:
-            _CANVAS.delete(self.image)
-        self.image = _CANVAS.create_image(x, y, anchor=self.anchor, image=self.image_file)
+            CANVAS.delete(self.image)
+        self.image = CANVAS.create_image(x, y, anchor=self.anchor, image=self.image_file)
 
 class Music:
     def __init__(self, fullpath=""):

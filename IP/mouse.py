@@ -1,7 +1,7 @@
 X = -100
 Y = -100
-pX = 0
-pY = 0
+beforeX = 0
+beforeY = 0
 pressX = 0
 pressY = 0
 clickX = 0
