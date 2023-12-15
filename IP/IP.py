@@ -614,15 +614,6 @@ class Image():
         self.image_file = tkinter.PhotoImage(file=self.file_path)
         self.image = None
         self.anchor = "center"
-                
-    def scale(self, ratio):
-        if ratio == 1 or ratio == 0:
-            return
-        elif ratio >= 1:
-            self.image_file = self.image_file.zoom(int(ratio),int(ratio))
-        else :
-            ratio = int(1/ratio) if type(ratio)==float else ratio
-            self.image_file = self.image_file.subsample(ratio,ratio)
             
     def changeAnchor(self):
         self.anchor = "nw" if self.anchor=="center" else "center"
