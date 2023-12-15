@@ -579,7 +579,7 @@ class Text():
         self.font_name = _DEFAULT_FONT
         self.fontsize = 20
         self.center_point = {"x":x, "y":y}
-        self.text = CANVAS.create_text(x, y, text=text, font=(self.font,self.fontsize))
+        self.text = CANVAS.create_text(x, y, text=text, font=(self.font,self.fontsize), fill="black")
         self.rotate_point = {"x":0, "y":0}
         
     def font(self, fontName, fontSize):
