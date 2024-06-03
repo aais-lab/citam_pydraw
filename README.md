@@ -71,13 +71,25 @@ ModuleNotFoundError: No module named "IP.keyboard"
 <img width="222" alt="IPファイル構成" src="https://github.com/aais-lab/IntroductionPrograming-library/assets/75377571/97f7fa3f-47e3-4e3f-8c2d-8a0ccf99f1ad">
 
 ## Usage
+### 導入方法
+#### gitからクローン
+```
+git clone https://github.com/aais-lab/IntroductionPrograming-library.git
+```
+#### ライブラリのフォルダへ移動して、pip install
+```
+cd IntroductionPrograming-library
+pip install .
+```
 
-## Features
+Successfully installed IP-x.x.xと表示されれば導入完了です。
 
 ## Reference
+関数等のリファレンス
+[IntroductionPrograming-Reference](https://aais-lab.github.io/IntroductionPrograming-Reference/)
 
 ## Author
+[Nao Yamanouchi](https://github.com/ClairdelunaEve)
 
 ## Licence
-
-[MIT](https://......)
+3-Clause BSD
