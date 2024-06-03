@@ -2,7 +2,7 @@
 
 ## Overview
 千葉工業大学 先進工学部 知能メディア工学科の第2セメスター「プログラミング言語基礎」及び第3セメスター「プロジェクト1」において使用される、Pythonの図形描画ライブラリです。
-tkinterのラッパーライブラリで、[Processing](https://processing.org/)ライクに動作させることを目指して作成されました。
+tkinterのWrapperで、[Processing](https://processing.org/)ライクに動作させることを目指して作成されました。
 
 ## Requirement
 ### 必要環境
