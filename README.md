@@ -78,8 +78,6 @@ ModuleNotFoundError: No module named "IP.keyboard"
 
 ## Author
 
-[twitter](https://twitter.com/Kotabrog)
-
 ## Licence
 
 [MIT](https://......)
