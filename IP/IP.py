@@ -624,17 +624,18 @@ class Image():
             CANVAS.delete(self.image)
         self.image = CANVAS.create_image(x, y, anchor=self.anchor, image=self.image_file)
 
+# Music Class
+def loadMusic(filepath):
+    if _OS == 'Windows':
+        if not _IS_ALL_TRACE : _TraceBack()
+        raise EnvironmentException("MusicはWindowsで利用できません")
+    return Music(filepath)
+
 class Music:
-    def __init__(self, fullpath=""):
-        if _OS == 'Windows':
-            if not _IS_ALL_TRACE : _TraceBack()
-            raise EnvironmentException("MusicはWindowsで利用できません")
-        self.music_path = fullpath
+    def __init__(self, filepath):
+        self.music_path = filepath
         self.process = None        
-    
-    def loadFile(self, fullpath):
-        self.music_path = fullpath
-        
+
     def play(self):
         if self.process is None :
             self.process = subprocess.Popen(['afplay', self.music_path])
