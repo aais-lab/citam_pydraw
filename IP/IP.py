@@ -272,7 +272,8 @@ def stop():
     _IS_DRAW_MOVED = False
 
 def date():
-    return datetime.datetime.now().date()
+    date = datetime.datetime.now()
+    return f"{date.year}-{date.month}-{date.day}"
 
 def year():
     return datetime.datetime.now().year
