@@ -16,6 +16,7 @@ import time
 import re
 import inspect
 import sys
+import os
 from typing import Any
 from . import mouse
 from . import keyboard
@@ -85,6 +86,9 @@ class BackgroundException(Exception):
     pass
 
 class NotFoundFunction(Exception):
+    pass
+
+class LoadingException(Exception):
     pass
 
 class EnvironmentException(Exception):
@@ -603,8 +607,18 @@ class Text():
         self.rotate_point.update({"x":base_x, "y":base_y})
 
 # image class
-def loadImage(filepath):
-    if not str(filepath).lower().endswith(('.pgm','.ppm','.gif','.png','.xbm')):
+def loadImage(filename):
+    datafilepath = os.path.join(os.path.dirname(inspect.stack()[1].filename),"data")
+    if not os.path.isdir(datafilepath):
+        if not _IS_ALL_TRACE : _TraceBack()
+        raise LoadingException("ファイルの読み込みが指示されましたが、dataフォルダがありません。")
+    
+    filepath = os.path.join(datafilepath,filename)
+    if not os.path.isfile(filepath):
+        if not _IS_ALL_TRACE : _TraceBack()
+        raise LoadingException(f"指定されたファイルがありません。\n指定されたファイル：{filepath}")
+    
+    if not str(filename).lower().endswith(('.pgm','.ppm','.gif','.png','.xbm')):
         if not _IS_ALL_TRACE : _TraceBack()
         raise FileTypeError("指定されたファイルは対応しているファイル形式ではありません。PGM,PPM,GIF,PNG,XBMのいずれかの画像ファイルを指定してください。")
     return Image(filepath)
@@ -625,10 +639,21 @@ class Image():
         self.image = CANVAS.create_image(x, y, anchor=self.anchor, image=self.image_file)
 
 # Music Class
-def loadMusic(filepath):
+def loadMusic(filename):
     if _OS == 'Windows':
         if not _IS_ALL_TRACE : _TraceBack()
         raise EnvironmentException("MusicはWindowsで利用できません")
+    
+    datafilepath = os.path.join(os.path.dirname(inspect.stack()[1].filename),"data")
+    if not os.path.isdir(datafilepath):
+        if not _IS_ALL_TRACE : _TraceBack()
+        raise LoadingException("ファイルの読み込みが指示されましたが、dataフォルダがありません。")
+    
+    filepath = os.path.join(datafilepath,filename)
+    if not os.path.isfile(filepath):
+        if not _IS_ALL_TRACE : _TraceBack()
+        raise LoadingException(f"指定されたファイルがありません。\n指定されたファイル：{filepath}")
+    
     return Music(filepath)
 
 class Music:
