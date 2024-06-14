@@ -160,7 +160,7 @@ def mousePressed(func):
         CANVAS.bind("<ButtonPress>", tmp())
     return _reg
 
-def mouseClicked(func):
+def mouseReleased(func):
     def _reg(*args, **kwargs):
         def tmp():
             global _IS_MOUSE_PRESSED_BEFORE
