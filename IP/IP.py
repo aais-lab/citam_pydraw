@@ -132,9 +132,9 @@ def animation(isAnimated):
             func(*args, **kwargs)
             process_time = (time.perf_counter() - process_start)*1000
             call_time = _RATE if process_time < _RATE else int(process_time)
-            if isAnimated and call_time > 2000 :
+            if isAnimated and call_time > 1000 :
                 if not _IS_ALL_TRACE : _TraceBack(2)
-                raise ProcessingIsLaggy("描画する関数の処理時間が2秒を超えています。CPUに負荷がかかるため描画できません。")
+                raise ProcessingIsLaggy("描画する関数の処理時間が1秒を超えています。PCに負荷がかかっているか、関数内の処理が重すぎます")
             global _CANVAS_JOBID
             if _IS_DRAW_MOVED:
                 _CANVAS_JOBID = CANVAS.after(call_time, _ani(func))
@@ -614,6 +614,9 @@ class Text():
 
     def changeBasePoint(self, base_x, base_y):
         self.rotate_point.update({"x":base_x, "y":base_y})
+    
+    def delete(self):
+        CANVAS.delete(self.text)
 
 # image class
 def loadImage(filename):
@@ -646,6 +649,9 @@ class Image():
         if self.image is None:
             CANVAS.delete(self.image)
         self.image = CANVAS.create_image(x, y, anchor=self.anchor, image=self.image_file)
+    
+    def delete(self):
+        CANVAS.delete(self.image)
 
 # Music Class
 def loadMusic(filename):
