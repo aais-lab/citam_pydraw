@@ -94,6 +94,9 @@ class LoadingException(Exception):
 class EnvironmentException(Exception):
     pass
 
+class ProcessingIsLaggy(Exception):
+    pass
+
 # default font
 _DEFAULT_FONT = ""
 if _OS == "Darwin":
@@ -125,10 +128,16 @@ def animation(isAnimated):
         def _reg(*args, **kwargs):
             if isAnimated:
                 clear()
+            process_start = time.perf_counter()
             func(*args, **kwargs)
+            process_time = (time.perf_counter() - process_start)*1000
+            call_time = _RATE if process_time < _RATE else int(process_time)
+            if isAnimated and call_time > 2000 :
+                if not _IS_ALL_TRACE : _TraceBack(2)
+                raise ProcessingIsLaggy("描画する関数の処理時間が2秒を超えています。CPUに負荷がかかるため描画できません。")
             global _CANVAS_JOBID
             if _IS_DRAW_MOVED:
-                _CANVAS_JOBID = CANVAS.after(_RATE, _ani(func))
+                _CANVAS_JOBID = CANVAS.after(call_time, _ani(func))
         return _reg
     return _ani
 
