@@ -103,16 +103,14 @@ elif _OS == "Windows":
     _DEFAULT_FONT = "Segoe UI"
 
 def _checkColor(arg):
-    if _COLOR_CORD.fullmatch(arg):
+    if arg in _COLOR or _COLOR_CORD.fullmatch(arg):
         return
-    elif arg in _COLOR:
-        return
-    elif re.match("^#",arg) and not _COLOR_CORD.fullmatch(arg):
-        if not _IS_ALL_TRACE : _TraceBack(3)
-        raise ColorError(f"{arg} はカラーコードとして不正です")
     elif arg not in _COLOR:
         if not _IS_ALL_TRACE : _TraceBack(3)
         raise ColorError(f"{arg} は指定可能な色名ではありません")
+    elif re.match("^#",arg) and not _COLOR_CORD.fullmatch(arg):
+        if not _IS_ALL_TRACE : _TraceBack(3)
+        raise ColorError(f"{arg} はカラーコードとして不正です")
 
 def _checkProcess(obj, process):
     while process.poll() is None:
