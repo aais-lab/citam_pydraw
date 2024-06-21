@@ -62,8 +62,8 @@ _IS_KEY_PRESSED_BEFORE = None
 _IS_MOUSE_PRESSED_BEFORE = None
 
 # pre point
-preMouseX = deque([],4)
-preMouseY = deque([],4)
+_preMouseX = deque([],4)
+_preMouseY = deque([],4)
 
 # thread
 _executor = concurrent.futures.ThreadPoolExecutor(max_workers=6)
@@ -371,10 +371,10 @@ class _Canvas_(tkinter.Canvas):
         master.bind("<KeyRelease>", self.keyRelease)
 
     def mousePosition(self, event):
-        preMouseX.append(mouse.X)
-        preMouseY.append(mouse.Y)
-        if len(preMouseY) > 3:
-            mouse.beforeX, mouse.beforeY = preMouseX.popleft(), preMouseY.popleft()
+        _preMouseX.append(mouse.X)
+        _preMouseY.append(mouse.Y)
+        if len(_preMouseY) > 3:
+            mouse.beforeX, mouse.beforeY = _preMouseX.popleft(), _preMouseY.popleft()
         mouse.X, mouse.Y = event.x, event.y
         
     def mousePress(self, event):
