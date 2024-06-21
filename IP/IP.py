@@ -9,7 +9,6 @@ import colorsys
 import datetime
 import subprocess
 import platform
-import threading
 from collections import deque
 import concurrent.futures
 import time
@@ -160,7 +159,7 @@ def mousePressed(func):
         CANVAS.bind("<ButtonPress>", tmp())
     return _reg
 
-def mouseClicked(func):
+def mouseReleased(func):
     def _reg(*args, **kwargs):
         def tmp():
             global _IS_MOUSE_PRESSED_BEFORE
@@ -367,7 +366,7 @@ class _Canvas_(tkinter.Canvas):
         )
         self.bind("<Motion>", self.mousePosition)
         self.bind("<ButtonPress>", self.mousePress)
-        self.bind("<ButtonRelease>", self.mouseClick)
+        self.bind("<ButtonRelease>", self.mouseRelease)
         master.bind("<KeyPress>", self.keyPress)
         master.bind("<KeyRelease>", self.keyRelease)
 
@@ -387,7 +386,7 @@ class _Canvas_(tkinter.Canvas):
         global _IS_MOUSE_PRESSED_BEFORE
         _IS_MOUSE_PRESSED_BEFORE = False
         
-    def mouseClick(self, event):
+    def mouseRelease(self, event):
         mouse.clickX, mouse.clickY = event.x, event.y
         mouse.isPressed = False
         global _IS_MOUSE_PRESSED_BEFORE
