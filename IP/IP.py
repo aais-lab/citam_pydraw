@@ -9,7 +9,6 @@ import colorsys
 import datetime
 import subprocess
 import platform
-import threading
 from collections import deque
 import concurrent.futures
 import time
