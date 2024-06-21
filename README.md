@@ -8,18 +8,22 @@ tkinterのWrapperで、[Processing](https://processing.org/)ライクに動作�
 ### 必要環境
 - MacOS
   - Windowsでも使用可能ですが、音楽を再生する機能のみ使用不可です
+    - 今後のバージョンでは対応しなくなる可能性があります
+  - Linux系に関しては対応予定ではありません
+    - これは本学科の推奨PCがMacであることに由来します
 - Python3.10.5 <
-  - 動作確認済み >=3.11.5
-  - 3.12系は現在未対応
+  - 動作確認済み >=3.12.2
+  - MacのSystem DefaultのPython環境にはライブラリを入れることができないため注意してください
 - Pythonの標準ライブラリのみで動作
   - tkinter 8.6以上が必須
+  - brew + pyenv環境の場合、対応したpython-tkが必要です
 
 ### 開発・動作確認環境
 - MacOS Ventura以降
 - Python
   - brew + pyenv
   - 3.10.5 <
-  - <= 3.11.5
+  - <= 3.12.2
 - ライブラリ
   - Python標準
   - tkinter 8.6
@@ -39,7 +43,7 @@ tkinter.Tcl().eval('info patchlevel')
 
 ```
 pyenv uninstall 3.10.x
-brew install python-tk
+brew install python-tk@3.10
 pyenv install 3.10.x
 ```
 
@@ -51,12 +55,17 @@ Python Build時にtkinterのリンクがちゃんといってない？詳細な�
 開発・動作確認環境と同様にbrew + pyenv環境の場合は
 
 ```
-pyenv uninstall 3.10.x
-brew install python-tk
-pyenv install 3.10.x
+pyenv uninstall 3.x.x
+brew install python-tk@3.x
+pyenv install 3.x.x
 ```
 
 でおおよその場合解決します。
+
+```
+brew install python-tk@3.x
+```
+の際は、python-tkのバージョンをインストールしたいPythonのバージョンに合わせて指定してください。
 
 #### import IP 実行時にModuleNotFoundErrorが出て、エラー箇所がimport IP.IPの場合
 他にも以下パターンは同様の原因です。
