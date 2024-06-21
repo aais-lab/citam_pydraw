@@ -43,7 +43,6 @@ _ROOT = None
 CANVAS = None
 _CANVAS_WIDTH = 500
 _CANVAS_HEIGHT = 500
-_CANVAS_JOBID = None
 _IS_DRAW_MOVED = True
 
 # fig tag
@@ -134,9 +133,8 @@ def animation(isAnimated):
             if isAnimated and call_time > 1000 :
                 if not _IS_ALL_TRACE : _TraceBack(2)
                 raise ProcessingIsLaggy("描画する関数の処理時間が1秒を超えています。PCに負荷がかかっているか、関数内の処理が重すぎます")
-            global _CANVAS_JOBID
             if _IS_DRAW_MOVED:
-                _CANVAS_JOBID = CANVAS.after(call_time, _ani(func))
+                CANVAS.after(call_time, _ani(func))
         return _reg
     return _ani
 
