@@ -43,7 +43,6 @@ _ROOT = None
 CANVAS = None
 _CANVAS_WIDTH = 500
 _CANVAS_HEIGHT = 500
-_CANVAS_JOBID = None
 _IS_DRAW_MOVED = True
 
 # fig tag
@@ -62,8 +61,8 @@ _IS_KEY_PRESSED_BEFORE = None
 _IS_MOUSE_PRESSED_BEFORE = None
 
 # pre point
-preMouseX = deque([],4)
-preMouseY = deque([],4)
+_preMouseX = deque([],4)
+_preMouseY = deque([],4)
 
 # thread
 _executor = concurrent.futures.ThreadPoolExecutor(max_workers=6)
@@ -104,16 +103,14 @@ elif _OS == "Windows":
     _DEFAULT_FONT = "Segoe UI"
 
 def _checkColor(arg):
-    if _COLOR_CORD.fullmatch(arg):
+    if arg in _COLOR or _COLOR_CORD.fullmatch(arg):
         return
-    elif arg in _COLOR:
-        return
-    elif re.match("^#",arg) and not _COLOR_CORD.fullmatch(arg):
-        if not _IS_ALL_TRACE : _TraceBack(3)
-        raise ColorError(f"{arg} はカラーコードとして不正です")
     elif arg not in _COLOR:
         if not _IS_ALL_TRACE : _TraceBack(3)
         raise ColorError(f"{arg} は指定可能な色名ではありません")
+    elif re.match("^#",arg) and not _COLOR_CORD.fullmatch(arg):
+        if not _IS_ALL_TRACE : _TraceBack(3)
+        raise ColorError(f"{arg} はカラーコードとして不正です")
 
 def _checkProcess(obj, process):
     while process.poll() is None:
@@ -134,9 +131,8 @@ def animation(isAnimated):
             if isAnimated and call_time > 1000 :
                 if not _IS_ALL_TRACE : _TraceBack(2)
                 raise ProcessingIsLaggy("描画する関数の処理時間が1秒を超えています。PCに負荷がかかっているか、関数内の処理が重すぎます")
-            global _CANVAS_JOBID
             if _IS_DRAW_MOVED:
-                _CANVAS_JOBID = CANVAS.after(call_time, _ani(func))
+                CANVAS.after(call_time, _ani(func))
         return _reg
     return _ani
 
@@ -371,10 +367,10 @@ class _Canvas_(tkinter.Canvas):
         master.bind("<KeyRelease>", self.keyRelease)
 
     def mousePosition(self, event):
-        preMouseX.append(mouse.X)
-        preMouseY.append(mouse.Y)
-        if len(preMouseY) > 3:
-            mouse.beforeX, mouse.beforeY = preMouseX.popleft(), preMouseY.popleft()
+        _preMouseX.append(mouse.X)
+        _preMouseY.append(mouse.Y)
+        if len(_preMouseY) > 3:
+            mouse.beforeX, mouse.beforeY = _preMouseX.popleft(), _preMouseY.popleft()
         mouse.X, mouse.Y = event.x, event.y
         
     def mousePress(self, event):
