@@ -101,6 +101,8 @@ if _OS == "Darwin":
     _DEFAULT_FONT = "Helvetica"
 elif _OS == "Windows":
     _DEFAULT_FONT = "Segoe UI"
+elif _OS == "Linux":
+    _DEFAULT_FONT = "Noto Serif CJK JP"
 
 def _checkColor(arg):
     if arg in _COLOR or _COLOR_CORD.fullmatch(arg):
@@ -593,6 +595,8 @@ class Text():
         
     def font(self, fontName, fontSize):
         fontName = self.font_name if fontName=="" else fontName
+        if _OS == "Linux":
+            fontName = "Noto Serif CJK JP"
         if fontName not in _FONTS:
             if not _IS_ALL_TRACE : _TraceBack()
             raise FontError(f"{fontName}は使用可能なフォントではありません")
