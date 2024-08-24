@@ -677,7 +677,10 @@ class Music:
 
     def play(self):
         if self.process is None :
-            self.process = subprocess.Popen(['afplay', self.music_path])
+            if _OS == "Darwin":
+                self.process = subprocess.Popen(['afplay', self.music_path])
+            elif _OS == "Linux":
+                self.process = subprocess.Popen(['mpv', '--no-video', self.music_path])
             _ROOT.protocol('WM_DELETE_WINDOW', self._kill)
             _executor.submit(lambda:_checkProcess(self,self.process))
     
