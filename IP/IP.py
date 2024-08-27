@@ -1,5 +1,5 @@
 ###
-# プログラミング基礎 v1.5.1
+# プログラミング基礎 v1.5.2
 ###
 from collections.abc import Callable, Iterable, Mapping
 import tkinter
@@ -101,6 +101,8 @@ if _OS == "Darwin":
     _DEFAULT_FONT = "Helvetica"
 elif _OS == "Windows":
     _DEFAULT_FONT = "Segoe UI"
+elif _OS == "Linux":
+    _DEFAULT_FONT = "Noto Serif CJK JP"
 
 def _checkColor(arg):
     if arg in _COLOR or _COLOR_CORD.fullmatch(arg):
@@ -593,6 +595,8 @@ class Text():
         
     def font(self, fontName, fontSize):
         fontName = self.font_name if fontName=="" else fontName
+        if _OS == "Linux":
+            fontName = "Noto Serif CJK JP"
         if fontName not in _FONTS:
             if not _IS_ALL_TRACE : _TraceBack()
             raise FontError(f"{fontName}は使用可能なフォントではありません")
@@ -673,7 +677,10 @@ class Music:
 
     def play(self):
         if self.process is None :
-            self.process = subprocess.Popen(['afplay', self.music_path])
+            if _OS == "Darwin":
+                self.process = subprocess.Popen(['afplay', self.music_path])
+            elif _OS == "Linux":
+                self.process = subprocess.Popen(['mpv', '--no-video', self.music_path])
             _ROOT.protocol('WM_DELETE_WINDOW', self._kill)
             _executor.submit(lambda:_checkProcess(self,self.process))
     
