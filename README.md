@@ -9,17 +9,22 @@ tkinterのWrapperで、[Processing](https://processing.org/)ライクに動作�
 - MacOS
   - Windowsでも使用可能ですが、音楽を再生する機能のみ使用不可です
     - 今後のバージョンでは対応しなくなる可能性があります
-  - Linux系に関しては対応予定ではありません
-    - これは本学科の推奨PCがMacであることに由来します
+  - Linux環境も一応ですが対応しています
+    - Docker環境の用意があります -> [準備中]
+    - 音楽再生はmpvコマンドによって実装しています
 - Python3.10.5 <
   - 動作確認済み >=3.12.2
   - MacのSystem DefaultのPython環境にはライブラリを入れることができないため注意してください
 - Pythonの標準ライブラリのみで動作
   - tkinter 8.6以上が必須
   - brew + pyenv環境の場合、対応したpython-tkが必要です
+- 音楽再生用コマンド
+  - MacOS: afplay
+  - Linux: mpv
 
 ### 開発・動作確認環境
 - MacOS Ventura以降
+- Docker環境 -> [準備中]
 - Python
   - brew + pyenv
   - 3.10.5 <
