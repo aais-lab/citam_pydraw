@@ -1,5 +1,5 @@
 ###
-# プログラミング基礎 v1.5.1
+# プログラミング基礎 v1.5.2
 ###
 from collections.abc import Callable, Iterable, Mapping
 import tkinter
@@ -680,7 +680,7 @@ class Music:
             if _OS == "Darwin":
                 self.process = subprocess.Popen(['afplay', self.music_path])
             elif _OS == "Linux":
-                self.process = subprocess.Popen(['mpv', '--no-video', self.music_path])
+                self.process = subprocess.Popen(['mpv', '--no-video', "--ao=pulse", self.music_path])
             _ROOT.protocol('WM_DELETE_WINDOW', self._kill)
             _executor.submit(lambda:_checkProcess(self,self.process))
     

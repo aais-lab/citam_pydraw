@@ -1,6 +1,6 @@
 ---
-name: Issueテンプレート
-about: Issueを作成する際のテンプレート
+name: Other
+about: その他のissueテンプレート
 title: ''
 labels: ''
 assignees: ''
