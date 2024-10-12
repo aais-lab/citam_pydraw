@@ -142,8 +142,9 @@ def animation(isAnimated):
 def mouseMoved(func):
     def _reg(*args, **kwargs):
         def tmp():
-            if 0 < mouse.X < _CANVAS_WIDTH and 0 < mouse.Y < _CANVAS_HEIGHT:
-                _executor.submit(lambda:func(*args, **kwargs))
+            if not mouse.isPressed:
+                if 0 < mouse.X < _CANVAS_WIDTH and 0 < mouse.Y < _CANVAS_HEIGHT:
+                    _executor.submit(lambda:func(*args, **kwargs))
         CANVAS.bind("<Motion>", tmp())
     return _reg
 
