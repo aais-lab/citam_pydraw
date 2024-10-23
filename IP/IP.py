@@ -1,5 +1,5 @@
 ###
-# プログラミング基礎 v1.5.3
+# プログラミング基礎 v1.5.4
 ###
 from collections.abc import Callable, Iterable, Mapping
 import tkinter
@@ -591,7 +591,7 @@ class Text():
         self.font_name = _DEFAULT_FONT
         self.fontsize = 20
         self.center_point = {"x":x, "y":y}
-        self.text = CANVAS.create_text(x, y, text=text, font=(self.font,self.fontsize), fill="black")
+        self.text = CANVAS.create_text(x, y, text=text, font=(self.font,self.fontsize), fill="black", tags=_TAG)
         self.rotate_point = {"x":0, "y":0}
         
     def font(self, fontName, fontSize):
