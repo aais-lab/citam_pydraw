@@ -10,7 +10,7 @@ tkinterのWrapperで、[Processing](https://processing.org/)ライクに動作�
   - Windowsでも使用可能ですが、音楽を再生する機能のみ使用不可です
     - 今後のバージョンでは対応しなくなる可能性があります
   - Linux環境も一応ですが対応しています
-    - Docker環境の用意があります -> [準備中]
+    - Docker環境の用意があります -> [IPが導入されるPython環境(Docker版)](https://github.com/aais-lab/PythonEnv_docker)
     - 音楽再生はmpvコマンドによって実装しています
 - Python3.10.5 <
   - 動作確認済み >=3.12.2
@@ -24,7 +24,7 @@ tkinterのWrapperで、[Processing](https://processing.org/)ライクに動作�
 
 ### 開発・動作確認環境
 - MacOS Ventura以降
-- Docker環境 -> [準備中]
+- [Docker環境](https://github.com/aais-lab/PythonEnv_docker)
 - Python
   - brew + pyenv
   - 3.10.5 <
