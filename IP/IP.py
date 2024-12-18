@@ -1,5 +1,5 @@
 ###
-# プログラミング基礎 v1.5.4
+# プログラミング基礎 v1.5.5
 ###
 from collections.abc import Callable, Iterable, Mapping
 import tkinter
@@ -610,7 +610,8 @@ class Text():
         CANVAS.itemconfigure(self.text, fill=color)
         
     def rotate(self, angle):
-        self.center_point.update(_calc_rotate(self.rotate_point, self.center_point, angle))                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+        self.center_point.update(_calc_rotate(self.rotate_point, self.center_point, angle))
+        CANVAS.coords(self.text, self.center_point["x"], self.center_point["y"])
 
     def changeBasePoint(self, base_x, base_y):
         self.rotate_point.update({"x":base_x, "y":base_y})
