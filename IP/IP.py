@@ -647,7 +647,7 @@ class Image():
         self.anchor = "nw" if self.anchor=="center" else "center"
         
     def show(self, x, y):
-        if self.image is None:
+        if self.image is not None:
             CANVAS.delete(self.image)
         self.image = CANVAS.create_image(x, y, anchor=self.anchor, image=self.image_file)
     
