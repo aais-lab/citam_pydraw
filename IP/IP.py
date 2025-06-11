@@ -1,5 +1,5 @@
 ###
-# プログラミング基礎 v1.5.5
+# プログラミング基礎 v1.5.6
 ###
 from collections.abc import Callable, Iterable, Mapping
 import tkinter
