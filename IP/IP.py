@@ -324,23 +324,30 @@ def _calc_rotate(basePoint, movePoint, angle):
 # window class
 class Window:
     def __init__(self, width=500, height=500, background="white"):
-        _checkColor(background)
         global CANVAS, _CANVAS_WIDTH, _CANVAS_HEIGHT, _FONTS, _ROOT
-        _CANVAS_WIDTH = width
-        _CANVAS_HEIGHT = height
+        if MAX_WIDTH < width or MAX_HEIGHT < height:
+            print(MAX_WIDTH < width, MAX_HEIGHT < height)
+            if not _IS_ALL_TRACE : _TraceBack()
+            raise ValueError(f"指定されたウィンドウサイズ(width:{width}, height:{height})は上限値を超えています。width:{MAX_WIDTH}, height:{MAX_HEIGHT}以下で設定してください。\nウィンドウサイズをより大きくしたい場合は、windowMaxSize関数を使用して上限サイズを変更してください。") from None
+        _CANVAS_HEIGHT, _CANVAS_WIDTH = height, width
+        _checkColor(background)
+        
         _ROOT = tkinter.Tk()
         _FONTS = list(font.families(_ROOT))
         _ROOT.resizable(width=False, height=False)
-        _ROOT.wm_maxsize(width=MAX_WIDTH,height=MAX_HEIGHT)
-        _ROOT.geometry('{}x{}+0+0'.format(str(_CANVAS_WIDTH),str(_CANVAS_HEIGHT)))
+        # _ROOT.wm_maxsize(width=MAX_WIDTH, height=MAX_HEIGHT)
+        _ROOT.geometry('{}x{}+0+0'.format(str(_CANVAS_WIDTH), str(_CANVAS_HEIGHT)))
         CANVAS = _Canvas_(_ROOT, background=background)
         CANVAS.pack(expand=True, fill=tkinter.BOTH)
     
     def size(self, width, height):
         global _CANVAS_WIDTH, _CANVAS_HEIGHT
-        _CANVAS_HEIGHT = height
-        _CANVAS_WIDTH = width
-        _ROOT.geometry('{}x{}+0+0'.format(str(_CANVAS_WIDTH),str(_CANVAS_HEIGHT)))
+        if MAX_WIDTH < width or MAX_HEIGHT < height:
+            if not _IS_ALL_TRACE : _TraceBack()
+            raise ValueError(f"指定されたウィンドウサイズ(width:{width}, height:{height})は上限を超えています。width:{MAX_WIDTH}, height:{MAX_HEIGHT}以下で設定してください。\nウィンドウサイズをより大きくしたい場合は、windowMaxSize関数を使用して上限サイズを変更してください。") from None
+        _CANVAS_HEIGHT, _CANVAS_WIDTH = height, width
+        
+        _ROOT.geometry('{}x{}+0+0'.format(str(_CANVAS_WIDTH), str(_CANVAS_HEIGHT)))
         
     def title(self, title):
         _ROOT.title(str(title))
@@ -695,3 +702,6 @@ class Music:
         if self.process is not None:
             self.process.kill()
         sys.exit()
+
+if __name__ == "__main__":
+    Window(999,100).show()
