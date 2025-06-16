@@ -1,6 +1,6 @@
 [project]
 name = "IP"
-version = '1.5.5'
+version = '1.5.6'
 authors = [  { name="Nao Yamanouchi" },]
 description = "CIT Introduction Programming class lib"
 license = {text = "3-Clause BSD License"}
