@@ -628,12 +628,12 @@ class Text():
 
 # image class
 def loadImage(filename):
-    datafilepath = Path(inspect.stack()[1].filename).parent / Path("data/")
-    if not datafilepath.is_dir():
+    dataDirPath = Path(inspect.stack()[1].filename).parent / Path("data/")
+    if not dataDirPath.is_dir():
         if not _IS_ALL_TRACE : _TraceBack()
         raise LoadingException("ファイルの読み込みが指示されましたが、dataフォルダがありません。")
     
-    filepath = datafilepath / Path(filename)
+    filepath = dataDirPath / Path(filename)
     if not filepath.is_file():
         if not _IS_ALL_TRACE : _TraceBack()
         raise LoadingException(f"指定されたファイルがないか、ファイルではありません。\n指定されたファイル：{filepath}")
@@ -666,12 +666,12 @@ def loadMusic(filename):
         if not _IS_ALL_TRACE : _TraceBack()
         raise EnvironmentException("MusicはWindowsで利用できません")
     
-    datafilepath = Path(inspect.stack()[1].filename) / Path("data/")
-    if not datafilepath.is_dir():
+    dataDirPath = Path(inspect.stack()[1].filename).parent / Path("data/")
+    if not dataDirPath.is_dir():
         if not _IS_ALL_TRACE : _TraceBack()
         raise LoadingException("ファイルの読み込みが指示されましたが、dataフォルダがありません。")
     
-    filepath = datafilepath / Path(filename)
+    filepath = dataDirPath / Path(filename)
     if not filepath.is_file():
         if not _IS_ALL_TRACE : _TraceBack()
         raise LoadingException(f"指定されたファイルがありません。\n指定されたファイル：{filepath}")
