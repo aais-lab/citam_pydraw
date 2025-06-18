@@ -15,7 +15,7 @@ import time
 import re
 import inspect
 import sys
-import os
+from pathlib import Path
 from typing import Any
 from . import mouse
 from . import keyboard
@@ -628,25 +628,24 @@ class Text():
 
 # image class
 def loadImage(filename):
-    datafilepath = os.path.join(os.path.dirname(inspect.stack()[1].filename),"data")
-    if not os.path.isdir(datafilepath):
+    dataDirPath = Path(inspect.stack()[1].filename).parent / Path("data/")
+    if not dataDirPath.is_dir():
         if not _IS_ALL_TRACE : _TraceBack()
         raise LoadingException("ファイルの読み込みが指示されましたが、dataフォルダがありません。")
     
-    filepath = os.path.join(datafilepath,filename)
-    if not os.path.isfile(filepath):
+    filepath = dataDirPath / Path(filename)
+    if not filepath.is_file():
         if not _IS_ALL_TRACE : _TraceBack()
-        raise LoadingException(f"指定されたファイルがありません。\n指定されたファイル：{filepath}")
+        raise LoadingException(f"指定されたファイルがないか、ファイルではありません。\n指定されたファイル：{filepath}")
     
-    if not str(filename).lower().endswith(('.pgm','.ppm','.gif','.png','.xbm')):
+    if not (filepath.suffix in ['.pgm','.ppm','.gif','.png','.xbm']):
         if not _IS_ALL_TRACE : _TraceBack()
         raise FileTypeError("指定されたファイルは対応しているファイル形式ではありません。PGM,PPM,GIF,PNG,XBMのいずれかの画像ファイルを指定してください。")
     return Image(filepath)
     
 class Image():
     def __init__(self, filepath):
-        self.file_path = filepath
-        self.image_file = tkinter.PhotoImage(file=self.file_path)
+        self.image_file = tkinter.PhotoImage(file=filepath)
         self.image = None
         self.anchor = "center"
             
@@ -667,13 +666,13 @@ def loadMusic(filename):
         if not _IS_ALL_TRACE : _TraceBack()
         raise EnvironmentException("MusicはWindowsで利用できません")
     
-    datafilepath = os.path.join(os.path.dirname(inspect.stack()[1].filename),"data")
-    if not os.path.isdir(datafilepath):
+    dataDirPath = Path(inspect.stack()[1].filename).parent / Path("data/")
+    if not dataDirPath.is_dir():
         if not _IS_ALL_TRACE : _TraceBack()
         raise LoadingException("ファイルの読み込みが指示されましたが、dataフォルダがありません。")
     
-    filepath = os.path.join(datafilepath,filename)
-    if not os.path.isfile(filepath):
+    filepath = dataDirPath / Path(filename)
+    if not filepath.is_file():
         if not _IS_ALL_TRACE : _TraceBack()
         raise LoadingException(f"指定されたファイルがありません。\n指定されたファイル：{filepath}")
     
@@ -702,6 +701,3 @@ class Music:
         if self.process is not None:
             self.process.kill()
         sys.exit()
-
-if __name__ == "__main__":
-    Window(999,100).show()
