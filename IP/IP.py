@@ -537,6 +537,7 @@ class Quad(Figure):
         self.point3.update(_calc_rotate(self.rotate_point, self.point3, angle))
         self.point4.update(_calc_rotate(self.rotate_point, self.point4, angle))
         CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], self.point4["x"], self.point4["y"])
+        return self
 
 class Ellipse(Figure):
     def __init__(self, x, y, width, height):
