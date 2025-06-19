@@ -429,25 +429,31 @@ class Figure:
     def fill(self, color):
         self.fill_color = color
         CANVAS.itemconfigure(self.figure, fill=self.fill_color)
+        return self
         
     def noFill(self):
         self.fill_color = ""
         CANVAS.itemconfigure(self.figure, fill=self.fill_color)
+        return self
         
     def outlineFill(self, color):
         self.outline_color = color
         CANVAS.itemconfigure(self.figure, outline=self.outline_color)
+        return self
         
     def noOutline(self):
         self.outline_color = ""
         CANVAS.itemconfigure(self.figure, outline=self.outline_color)
+        return self
         
     def outlineWidth(self, width):
         self.outline_width = width
         CANVAS.itemconfigure(self.figure, width=self.outline_width)
+        return self
         
     def changeBasePoint(self, base_x, base_y):
         self.rotate_point.update({"x":base_x, "y":base_y})
+        return self
         
     def delete(self):
         CANVAS.delete(self.figure)
