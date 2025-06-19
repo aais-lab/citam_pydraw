@@ -348,9 +348,11 @@ class Window:
         _CANVAS_HEIGHT, _CANVAS_WIDTH = height, width
         
         _ROOT.geometry('{}x{}+0+0'.format(str(_CANVAS_WIDTH), str(_CANVAS_HEIGHT)))
+        return self
         
     def title(self, title):
         _ROOT.title(str(title))
+        return self
         
     def background(self, background):
         if isinstance(background, Image):
@@ -358,6 +360,7 @@ class Window:
             raise BackgroundException("背景色に画像を指定することはできません") from None
         _checkColor(background)
         CANVAS.configure(background=background)
+        return self
         
     def show(self):
         _ROOT.mainloop()
