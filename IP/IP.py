@@ -715,6 +715,8 @@ class Music:
                 self.process = subprocess.Popen(['mpv', '--no-video', "--ao=pulse", self.music_path])
             _ROOT.protocol('WM_DELETE_WINDOW', self._kill)
             _executor.submit(lambda:_checkProcess(self,self.process))
+            return 0 # 正常動作
+        return 1 # すでに再生されているため再生不可
     
     def stop(self):
         if self.process is not None:
