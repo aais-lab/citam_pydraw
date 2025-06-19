@@ -519,6 +519,7 @@ class Rectangle(Figure):
         self.point3.update(_calc_rotate(self.rotate_point, self.point3, angle))
         self.point4.update(_calc_rotate(self.rotate_point, self.point4, angle))
         CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], self.point4["x"], self.point4["y"])
+        return self
         
 class Quad(Figure):
     def __init__(self, x1, y1, x2, y2, x3, y3, x4, y4):
