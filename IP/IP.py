@@ -470,11 +470,13 @@ class Line(Figure):
     def lineWeight(self, lineWeight):
         self.line_weight = lineWeight
         CANVAS.itemconfigure(self.figure, width=self.line_weight)
+        return self
         
     def rotate(self, angle):
         self.point1.update(_calc_rotate(self.rotate_point, self.point1, angle))
         self.point2.update(_calc_rotate(self.rotate_point, self.point2, angle))
         CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"])
+        return self
 
     def outlineFill(self, color):
         if not _IS_ALL_TRACE : _TraceBack()
