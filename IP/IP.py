@@ -501,6 +501,7 @@ class Triangle(Figure):
         self.point2.update(_calc_rotate(self.rotate_point, self.point2, angle))
         self.point3.update(_calc_rotate(self.rotate_point, self.point3, angle))
         CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"])
+        return self
 
 class Rectangle(Figure):
     def __init__(self, x, y, width, height):
