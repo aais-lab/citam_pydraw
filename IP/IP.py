@@ -599,6 +599,7 @@ class Arc(Figure):
         self.point1.update({"x":self.figure_center_point["x"]-self.size["width"]/2, "y":self.figure_center_point["y"]-self.size["height"]/2})
         self.point2.update({"x":self.figure_center_point["x"]+self.size["width"]/2, "y":self.figure_center_point["y"]+self.size["height"]/2})
         CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"])
+        return self
 
     def outlineStyle(self, style):
         styleList = ["pieslice","arc","chord"]
@@ -607,6 +608,7 @@ class Arc(Figure):
         else:
             raise ShapeError(f"{style}は使用可能な外枠線のスタイルではありません。扇形'pieslice',円弧'arc',円弧と弦'chord'のいずれかを指定してください。")
         CANVAS.itemconfigure(self.figure, style=self.outline_style)
+        return self
 
 # text class
 class Text():
