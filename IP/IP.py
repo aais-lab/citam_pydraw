@@ -348,9 +348,11 @@ class Window:
         _CANVAS_HEIGHT, _CANVAS_WIDTH = height, width
         
         _ROOT.geometry('{}x{}+0+0'.format(str(_CANVAS_WIDTH), str(_CANVAS_HEIGHT)))
+        return self
         
     def title(self, title):
         _ROOT.title(str(title))
+        return self
         
     def background(self, background):
         if isinstance(background, Image):
@@ -358,6 +360,7 @@ class Window:
             raise BackgroundException("背景色に画像を指定することはできません") from None
         _checkColor(background)
         CANVAS.configure(background=background)
+        return self
         
     def show(self):
         _ROOT.mainloop()
@@ -426,25 +429,31 @@ class Figure:
     def fill(self, color):
         self.fill_color = color
         CANVAS.itemconfigure(self.figure, fill=self.fill_color)
+        return self
         
     def noFill(self):
         self.fill_color = ""
         CANVAS.itemconfigure(self.figure, fill=self.fill_color)
+        return self
         
     def outlineFill(self, color):
         self.outline_color = color
         CANVAS.itemconfigure(self.figure, outline=self.outline_color)
+        return self
         
     def noOutline(self):
         self.outline_color = ""
         CANVAS.itemconfigure(self.figure, outline=self.outline_color)
+        return self
         
     def outlineWidth(self, width):
         self.outline_width = width
         CANVAS.itemconfigure(self.figure, width=self.outline_width)
+        return self
         
     def changeBasePoint(self, base_x, base_y):
         self.rotate_point.update({"x":base_x, "y":base_y})
+        return self
         
     def delete(self):
         CANVAS.delete(self.figure)
@@ -461,11 +470,13 @@ class Line(Figure):
     def lineWeight(self, lineWeight):
         self.line_weight = lineWeight
         CANVAS.itemconfigure(self.figure, width=self.line_weight)
+        return self
         
     def rotate(self, angle):
         self.point1.update(_calc_rotate(self.rotate_point, self.point1, angle))
         self.point2.update(_calc_rotate(self.rotate_point, self.point2, angle))
         CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"])
+        return self
 
     def outlineFill(self, color):
         if not _IS_ALL_TRACE : _TraceBack()
@@ -490,6 +501,7 @@ class Triangle(Figure):
         self.point2.update(_calc_rotate(self.rotate_point, self.point2, angle))
         self.point3.update(_calc_rotate(self.rotate_point, self.point3, angle))
         CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"])
+        return self
 
 class Rectangle(Figure):
     def __init__(self, x, y, width, height):
@@ -507,6 +519,7 @@ class Rectangle(Figure):
         self.point3.update(_calc_rotate(self.rotate_point, self.point3, angle))
         self.point4.update(_calc_rotate(self.rotate_point, self.point4, angle))
         CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], self.point4["x"], self.point4["y"])
+        return self
         
 class Quad(Figure):
     def __init__(self, x1, y1, x2, y2, x3, y3, x4, y4):
@@ -524,6 +537,7 @@ class Quad(Figure):
         self.point3.update(_calc_rotate(self.rotate_point, self.point3, angle))
         self.point4.update(_calc_rotate(self.rotate_point, self.point4, angle))
         CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], self.point4["x"], self.point4["y"])
+        return self
 
 class Ellipse(Figure):
     def __init__(self, x, y, width, height):
@@ -539,6 +553,7 @@ class Ellipse(Figure):
         self.point1.update({"x":self.figure_center_point["x"]-self.size["width"]/2, "y":self.figure_center_point["y"]-self.size["height"]/2})
         self.point2.update({"x":self.figure_center_point["x"]+self.size["width"]/2, "y":self.figure_center_point["y"]+self.size["height"]/2})
         CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"])
+        return self
 
 class Point(Figure):
     def __init__(self, x, y, size):
@@ -555,6 +570,7 @@ class Point(Figure):
         self.point1.update({"x":self.figure_center_point["x"]-self.size/2, "y":self.figure_center_point["y"]-self.size/2})
         self.point2.update({"x":self.figure_center_point["x"]+self.size/2, "y":self.figure_center_point["y"]+self.size/2})
         CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"])
+        return self
 
     def outlineFill(self, color):
         if not _IS_ALL_TRACE : _TraceBack()
@@ -583,6 +599,7 @@ class Arc(Figure):
         self.point1.update({"x":self.figure_center_point["x"]-self.size["width"]/2, "y":self.figure_center_point["y"]-self.size["height"]/2})
         self.point2.update({"x":self.figure_center_point["x"]+self.size["width"]/2, "y":self.figure_center_point["y"]+self.size["height"]/2})
         CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"])
+        return self
 
     def outlineStyle(self, style):
         styleList = ["pieslice","arc","chord"]
@@ -591,6 +608,7 @@ class Arc(Figure):
         else:
             raise ShapeError(f"{style}は使用可能な外枠線のスタイルではありません。扇形'pieslice',円弧'arc',円弧と弦'chord'のいずれかを指定してください。")
         CANVAS.itemconfigure(self.figure, style=self.outline_style)
+        return self
 
 # text class
 class Text():
@@ -611,17 +629,21 @@ class Text():
         self.font_name = fontName
         self.fontsize = fontSize
         CANVAS.itemconfigure(self.text,font=(self.font_name,self.fontsize))
+        return self
         
     def fill(self, color):
         _checkColor(color)
         CANVAS.itemconfigure(self.text, fill=color)
+        return self
         
     def rotate(self, angle):
         self.center_point.update(_calc_rotate(self.rotate_point, self.center_point, angle))
         CANVAS.coords(self.text, self.center_point["x"], self.center_point["y"])
+        return self
 
     def changeBasePoint(self, base_x, base_y):
         self.rotate_point.update({"x":base_x, "y":base_y})
+        return self
     
     def delete(self):
         CANVAS.delete(self.text)
@@ -651,11 +673,13 @@ class Image():
             
     def changeAnchor(self):
         self.anchor = "nw" if self.anchor=="center" else "center"
+        return self
         
     def show(self, x, y):
         if self.image is not None:
             CANVAS.delete(self.image)
         self.image = CANVAS.create_image(x, y, anchor=self.anchor, image=self.image_file)
+        return self
     
     def delete(self):
         CANVAS.delete(self.image)
@@ -691,6 +715,8 @@ class Music:
                 self.process = subprocess.Popen(['mpv', '--no-video', "--ao=pulse", self.music_path])
             _ROOT.protocol('WM_DELETE_WINDOW', self._kill)
             _executor.submit(lambda:_checkProcess(self,self.process))
+            return 0 # 正常動作
+        return 1 # すでに再生されているため再生不可
     
     def stop(self):
         if self.process is not None:
