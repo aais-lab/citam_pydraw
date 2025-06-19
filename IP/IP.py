@@ -570,6 +570,7 @@ class Point(Figure):
         self.point1.update({"x":self.figure_center_point["x"]-self.size/2, "y":self.figure_center_point["y"]-self.size/2})
         self.point2.update({"x":self.figure_center_point["x"]+self.size/2, "y":self.figure_center_point["y"]+self.size/2})
         CANVAS.coords(self.figure, self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"])
+        return self
 
     def outlineFill(self, color):
         if not _IS_ALL_TRACE : _TraceBack()
