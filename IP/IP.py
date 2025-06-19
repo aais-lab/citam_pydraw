@@ -629,17 +629,21 @@ class Text():
         self.font_name = fontName
         self.fontsize = fontSize
         CANVAS.itemconfigure(self.text,font=(self.font_name,self.fontsize))
+        return self
         
     def fill(self, color):
         _checkColor(color)
         CANVAS.itemconfigure(self.text, fill=color)
+        return self
         
     def rotate(self, angle):
         self.center_point.update(_calc_rotate(self.rotate_point, self.center_point, angle))
         CANVAS.coords(self.text, self.center_point["x"], self.center_point["y"])
+        return self
 
     def changeBasePoint(self, base_x, base_y):
         self.rotate_point.update({"x":base_x, "y":base_y})
+        return self
     
     def delete(self):
         CANVAS.delete(self.text)
