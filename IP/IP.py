@@ -325,6 +325,10 @@ def _calc_rotate(basePoint, movePoint, angle):
 class Window:
     def __init__(self, width=500, height=500, background="white"):
         global CANVAS, _CANVAS_WIDTH, _CANVAS_HEIGHT, _FONTS, _ROOT
+        
+        self.title_text = None
+        self.background_color = background
+        
         if MAX_WIDTH < width or MAX_HEIGHT < height:
             print(MAX_WIDTH < width, MAX_HEIGHT < height)
             if not _IS_ALL_TRACE : _TraceBack()
@@ -351,7 +355,8 @@ class Window:
         return self
         
     def title(self, title):
-        _ROOT.title(str(title))
+        self.title_text = title
+        _ROOT.title(str(self.title_text))
         return self
         
     def background(self, background):
@@ -359,8 +364,12 @@ class Window:
             if not _IS_ALL_TRACE : _TraceBack()
             raise BackgroundException("背景色に画像を指定することはできません") from None
         _checkColor(background)
-        CANVAS.configure(background=background)
+        self.background_color = background
+        CANVAS.configure(background=self.background_color)
         return self
+    
+    def info(self):
+        return {"title":self.title_text, "width":_CANVAS_WIDTH, "height":_CANVAS_HEIGHT, "background_color":self.background_color}
         
     def show(self):
         _ROOT.mainloop()
