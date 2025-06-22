@@ -463,6 +463,9 @@ class Figure:
     def changeBasePoint(self, base_x, base_y):
         self.rotate_point.update({"x":base_x, "y":base_y})
         return self
+    
+    def info(self):
+        return {k: v for k, v in vars(self).items() if k != "figure"}
         
     def delete(self):
         CANVAS.delete(self.figure)
@@ -625,11 +628,12 @@ class Text():
         self.font_name = _DEFAULT_FONT
         self.fontsize = 20
         self.center_point = {"x":x, "y":y}
-        self.text = CANVAS.create_text(x, y, text=text, font=(self.font,self.fontsize), fill="black", tags=_TAG)
+        self.text = text
+        self.figure = CANVAS.create_text(x, y, text=self.text, font=(self.font, self.fontsize), fill="black", tags=_TAG)
         self.rotate_point = {"x":0, "y":0}
         
     def font(self, fontName, fontSize):
-        fontName = self.font_name if fontName=="" else fontName
+        fontName = self.font_name if fontName == "" else fontName
         if _OS == "Linux":
             fontName = "Noto Serif CJK JP"
         if fontName not in _FONTS:
@@ -637,25 +641,28 @@ class Text():
             raise FontError(f"{fontName}は使用可能なフォントではありません")
         self.font_name = fontName
         self.fontsize = fontSize
-        CANVAS.itemconfigure(self.text,font=(self.font_name,self.fontsize))
+        CANVAS.itemconfigure(self.figure, font=(self.font_name, self.fontsize))
         return self
         
     def fill(self, color):
         _checkColor(color)
-        CANVAS.itemconfigure(self.text, fill=color)
+        CANVAS.itemconfigure(self.figure, fill=color)
         return self
         
     def rotate(self, angle):
         self.center_point.update(_calc_rotate(self.rotate_point, self.center_point, angle))
-        CANVAS.coords(self.text, self.center_point["x"], self.center_point["y"])
+        CANVAS.coords(self.figure, self.center_point["x"], self.center_point["y"])
         return self
 
     def changeBasePoint(self, base_x, base_y):
         self.rotate_point.update({"x":base_x, "y":base_y})
         return self
     
+    def info(self):
+        return {k: v for k, v in vars(self).items() if k != "figure"}
+    
     def delete(self):
-        CANVAS.delete(self.text)
+        CANVAS.delete(self.figure)
 
 # image class
 def loadImage(filename):
