@@ -17,6 +17,8 @@ import inspect
 import sys
 from pathlib import Path
 from typing import Any
+from PIL import Image as PILImage
+from PIL import ImageTk
 from . import mouse
 from . import keyboard
 
@@ -690,26 +692,37 @@ def loadImage(filename):
         if not _IS_ALL_TRACE : _TraceBack()
         raise LoadingException(f"指定されたファイルがないか、ファイルではありません。\n指定されたファイル：{filepath}")
     
-    if not (filepath.suffix in ['.pgm','.ppm','.gif','.png','.xbm']):
+    if not (filepath.suffix in ['.png','.jpg']):
         if not _IS_ALL_TRACE : _TraceBack()
-        raise FileTypeError("指定されたファイルは対応しているファイル形式ではありません。PGM,PPM,GIF,PNG,XBMのいずれかの画像ファイルを指定してください。")
+        raise FileTypeError("指定されたファイルは対応しているファイル形式ではありません。PNG もしくは JPEG の画像ファイルを指定してください。")
     return Image(filepath)
     
 class Image():
     def __init__(self, filepath):
-        self.image_file = tkinter.PhotoImage(file=filepath)
+        self.file_path = filepath
         self.image = None
         self.anchor = "center"
-        self._INFO_KEYS = {"image_file":"FilePath", "anchor":"AnchorPoint"}
-        self._EXCLUSION_KEYS = ["image", "_INFO_KEYS_", "_EXCLUSION_KEYS"]
+        self.angle = 0
+        self._INFO_KEYS = {"file_path":"FilePath", "anchor":"AnchorPoint", "angle":"Angle"}
+        self._EXCLUSION_KEYS = ["image", "image_file", "_INFO_KEYS_", "_EXCLUSION_KEYS"]
             
     def changeAnchor(self):
         self.anchor = "nw" if self.anchor=="center" else "center"
         return self
         
+    def rotate(self, angle):
+        self.angle = angle
+        return self
+        
     def show(self, x, y):
         if self.image is not None:
             CANVAS.delete(self.image)
+        tmp_img = PILImage.open(self.file_path).convert("RGBA")
+        if self.angle != 0:
+            tmp_img = tmp_img.rotate(-self.angle, expand=True)
+            new_img = PILImage.new("RGBA", tmp_img.size, color=(0,0,0))
+            new_img.paste(tmp_img, ((new_img.width - tmp_img.width) // 2,(new_img.height - tmp_img.height) // 2), tmp_img)
+        self.image_file = ImageTk.PhotoImage(tmp_img)
         self.image = CANVAS.create_image(x, y, anchor=self.anchor, image=self.image_file)
         return self
     
