@@ -704,7 +704,7 @@ class Image():
         self.anchor = "center"
         self.angle = 0
         self._INFO_KEYS = {"file_path":"FilePath", "anchor":"AnchorPoint", "angle":"Angle"}
-        self._EXCLUSION_KEYS = ["image", "image_file", "_INFO_KEYS_", "_EXCLUSION_KEYS"]
+        self._EXCLUSION_KEYS = ["image", "image_file", "_INFO_KEYS", "_EXCLUSION_KEYS"]
             
     def changeAnchor(self):
         self.anchor = "nw" if self.anchor=="center" else "center"
@@ -754,8 +754,8 @@ class Music:
     def __init__(self, filepath):
         self.music_path = filepath
         self.process = None
-        self._INFO_KEYS = {"music_file":"FilePath"}
-        self._EXCLUSION_KEYS = ["process", "_INFO_KEYS_", "_EXCLUSION_KEYS"]   
+        self._INFO_KEYS = {"music_path":"FilePath"}
+        self._EXCLUSION_KEYS = ["process", "_INFO_KEYS", "_EXCLUSION_KEYS"]   
     
     def getInfo(self):
         return {self._INFO_KEYS[k]: v for k, v in vars(self).items() if k not in self._EXCLUSION_KEYS}
