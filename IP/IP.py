@@ -436,7 +436,7 @@ class Figure:
         self.outline_width = 1
         self.rotate_point = {"x":0, "y":0}
         self.figure = None
-        self._INFO_KEYS = {"fill_color":"FillColor", "outline_color":"OutlineFill", "outline_width":"OutlineWidth", "rotate_point":"BasePoint"}
+        self._INFO_KEYS = {"fill_color":"FillColor", "outline_color":"OutlineFill", "outline_width":"OutlineWidth", "rotate_point":"RotationCenter"}
         self._EXCLUSION_KEYS = ["figure", "_INFO_KEYS", "_EXCLUSION_KEYS"]
         
     def fill(self, color):
