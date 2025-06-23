@@ -371,7 +371,7 @@ class Window:
         return self
     
     def getInfo(self):
-        return {"Object":self.__class__.__name__, "Title":self.title_text, "Width":_CANVAS_WIDTH, "Height":_CANVAS_HEIGHT, "BackgroundColor":self.background_color}
+        return {"Object":self.__class__.__name__, "Title":self.title_text, "Size":{"Width":_CANVAS_WIDTH, "Height":_CANVAS_HEIGHT}, "BackgroundColor":self.background_color}
         
     def show(self):
         _ROOT.mainloop()
@@ -436,7 +436,7 @@ class Figure:
         self.outline_width = 1
         self.rotate_point = {"x":0, "y":0}
         self.figure = None
-        self._INFO_KEYS = {"fill_color":"FillColor", "outline_color":"OutlineFill", "outline_width":"OutlineWidth", "rotate_point":"BasePoint"}
+        self._INFO_KEYS = {"fill_color":"FillColor", "outline_color":"OutlineFill", "outline_width":"OutlineWidth", "rotate_point":"RotationCenter"}
         self._EXCLUSION_KEYS = ["figure", "_INFO_KEYS", "_EXCLUSION_KEYS"]
         
     def fill(self, color):
@@ -525,12 +525,13 @@ class Triangle(Figure):
 class Rectangle(Figure):
     def __init__(self, x, y, width, height):
         super().__init__()
+        self.size = {"width":width, "height":height}
         self.point1 = {"x":x, "y":y}
         self.point2 = {"x":x+width, "y":y}
         self.point3 = {"x":x+width, "y":y+height}
         self.point4 = {"x":x, "y":y+height}
         self.figure = CANVAS.create_polygon(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], self.point4["x"], self.point4["y"], fill=self.fill_color, outline=self.outline_color, width=self.outline_width, tags=_TAG)
-        self._INFO_KEYS.update(point1="Point1", point2="Point2", point3="Point3", point4="Point4")
+        self._INFO_KEYS.update(point1="Point1", point2="Point2", point3="Point3", point4="Point4", size="Size")
         
     def rotate(self, angle):
         self.point1.update(_calc_rotate(self.rotate_point, self.point1, angle))
@@ -699,12 +700,12 @@ def loadImage(filename):
     
 class Image():
     def __init__(self, filepath):
-        self.file_path = filepath
+        self.file_path = str(filepath)
         self.image = None
         self.anchor = "center"
         self.angle = 0
         self._INFO_KEYS = {"file_path":"FilePath", "anchor":"AnchorPoint", "angle":"Angle"}
-        self._EXCLUSION_KEYS = ["image", "image_file", "_INFO_KEYS_", "_EXCLUSION_KEYS"]
+        self._EXCLUSION_KEYS = ["image", "image_file", "_INFO_KEYS", "_EXCLUSION_KEYS"]
             
     def changeAnchor(self):
         self.anchor = "nw" if self.anchor=="center" else "center"
@@ -752,10 +753,10 @@ def loadMusic(filename):
 
 class Music:
     def __init__(self, filepath):
-        self.music_path = filepath
+        self.music_path = str(filepath)
         self.process = None
-        self._INFO_KEYS = {"music_file":"FilePath"}
-        self._EXCLUSION_KEYS = ["process", "_INFO_KEYS_", "_EXCLUSION_KEYS"]   
+        self._INFO_KEYS = {"music_path":"FilePath"}
+        self._EXCLUSION_KEYS = ["process", "_INFO_KEYS", "_EXCLUSION_KEYS"]   
     
     def getInfo(self):
         return {self._INFO_KEYS[k]: v for k, v in vars(self).items() if k not in self._EXCLUSION_KEYS}
