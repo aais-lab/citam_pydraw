@@ -371,7 +371,7 @@ class Window:
         return self
     
     def getInfo(self):
-        return {"Object":self.__class__.__name__, "Title":self.title_text, "Width":_CANVAS_WIDTH, "Height":_CANVAS_HEIGHT, "BackgroundColor":self.background_color}
+        return {"Object":self.__class__.__name__, "Title":self.title_text, "Size":{"Width":_CANVAS_WIDTH, "Height":_CANVAS_HEIGHT}, "BackgroundColor":self.background_color}
         
     def show(self):
         _ROOT.mainloop()
@@ -525,12 +525,13 @@ class Triangle(Figure):
 class Rectangle(Figure):
     def __init__(self, x, y, width, height):
         super().__init__()
+        self.size = {"width":width, "height":height}
         self.point1 = {"x":x, "y":y}
         self.point2 = {"x":x+width, "y":y}
         self.point3 = {"x":x+width, "y":y+height}
         self.point4 = {"x":x, "y":y+height}
         self.figure = CANVAS.create_polygon(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], self.point4["x"], self.point4["y"], fill=self.fill_color, outline=self.outline_color, width=self.outline_width, tags=_TAG)
-        self._INFO_KEYS.update(point1="Point1", point2="Point2", point3="Point3", point4="Point4")
+        self._INFO_KEYS.update(point1="Point1", point2="Point2", point3="Point3", point4="Point4", size="Size")
         
     def rotate(self, angle):
         self.point1.update(_calc_rotate(self.rotate_point, self.point1, angle))
