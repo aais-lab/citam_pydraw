@@ -700,7 +700,7 @@ def loadImage(filename):
     
 class Image():
     def __init__(self, filepath):
-        self.file_path = filepath
+        self.file_path = str(filepath)
         self.image = None
         self.anchor = "center"
         self.angle = 0
@@ -753,7 +753,7 @@ def loadMusic(filename):
 
 class Music:
     def __init__(self, filepath):
-        self.music_path = filepath
+        self.music_path = str(filepath)
         self.process = None
         self._INFO_KEYS = {"music_path":"FilePath"}
         self._EXCLUSION_KEYS = ["process", "_INFO_KEYS", "_EXCLUSION_KEYS"]   
