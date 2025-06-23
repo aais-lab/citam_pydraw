@@ -325,6 +325,10 @@ def _calc_rotate(basePoint, movePoint, angle):
 class Window:
     def __init__(self, width=500, height=500, background="white"):
         global CANVAS, _CANVAS_WIDTH, _CANVAS_HEIGHT, _FONTS, _ROOT
+        
+        self.title_text = None
+        self.background_color = background
+        
         if MAX_WIDTH < width or MAX_HEIGHT < height:
             print(MAX_WIDTH < width, MAX_HEIGHT < height)
             if not _IS_ALL_TRACE : _TraceBack()
@@ -351,7 +355,8 @@ class Window:
         return self
         
     def title(self, title):
-        _ROOT.title(str(title))
+        self.title_text = title
+        _ROOT.title(str(self.title_text))
         return self
         
     def background(self, background):
@@ -359,8 +364,12 @@ class Window:
             if not _IS_ALL_TRACE : _TraceBack()
             raise BackgroundException("背景色に画像を指定することはできません") from None
         _checkColor(background)
-        CANVAS.configure(background=background)
+        self.background_color = background
+        CANVAS.configure(background=self.background_color)
         return self
+    
+    def getInfo(self):
+        return {"Object":self.__class__.__name__, "Title":self.title_text, "Width":_CANVAS_WIDTH, "Height":_CANVAS_HEIGHT, "BackgroundColor":self.background_color}
         
     def show(self):
         _ROOT.mainloop()
@@ -418,13 +427,15 @@ class _Canvas_(tkinter.Canvas):
 
 
 # figure class (super)
-class Figure:
+class Figure:    
     def __init__(self):
         self.fill_color = "black"
         self.outline_color = "black"
         self.outline_width = 1
         self.rotate_point = {"x":0, "y":0}
         self.figure = None
+        self._INFO_KEYS = {"fill_color":"FillColor", "outline_color":"OutlineFill", "outline_width":"OutlineWidth", "rotate_point":"BasePoint"}
+        self._EXCLUSION_KEYS = ["figure", "_INFO_KEYS", "_EXCLUSION_KEYS"]
         
     def fill(self, color):
         self.fill_color = color
@@ -454,6 +465,10 @@ class Figure:
     def changeBasePoint(self, base_x, base_y):
         self.rotate_point.update({"x":base_x, "y":base_y})
         return self
+    
+    def getInfo(self):
+        instance_info = {**{"Object":self.__class__.__name__}, **{self._INFO_KEYS[k]: v for k, v in vars(self).items() if k not in self._EXCLUSION_KEYS}}
+        return instance_info
         
     def delete(self):
         CANVAS.delete(self.figure)
@@ -466,6 +481,7 @@ class Line(Figure):
         self.point2 = {"x":endX, "y":endY}
         self.line_weight = lineWeight
         self.figure = CANVAS.create_line(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], fill=self.fill_color, width=self.line_weight, tags=_TAG)
+        self._INFO_KEYS.update(point1="Start", point2="End", line_weight="LineWeight")
         
     def lineWeight(self, lineWeight):
         self.line_weight = lineWeight
@@ -495,6 +511,7 @@ class Triangle(Figure):
         self.point2 = {"x":x2, "y":y2}
         self.point3 = {"x":x3, "y":y3}
         self.figure = CANVAS.create_polygon(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], fill=self.fill_color, outline=self.outline_color, width=self.outline_width, tags=_TAG)
+        self._INFO_KEYS.update(point1="Point1", point2="Point2", point3="Point3")
 
     def rotate(self, angle):
         self.point1.update(_calc_rotate(self.rotate_point, self.point1, angle))
@@ -510,8 +527,8 @@ class Rectangle(Figure):
         self.point2 = {"x":x+width, "y":y}
         self.point3 = {"x":x+width, "y":y+height}
         self.point4 = {"x":x, "y":y+height}
-
         self.figure = CANVAS.create_polygon(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], self.point4["x"], self.point4["y"], fill=self.fill_color, outline=self.outline_color, width=self.outline_width, tags=_TAG)
+        self._INFO_KEYS.update(point1="Point1", point2="Point2", point3="Point3", point4="Point4")
         
     def rotate(self, angle):
         self.point1.update(_calc_rotate(self.rotate_point, self.point1, angle))
@@ -528,8 +545,8 @@ class Quad(Figure):
         self.point2 = {"x":x2, "y":y2}
         self.point3 = {"x":x3, "y":y3}
         self.point4 = {"x":x4, "y":y4}
-        
         self.figure = CANVAS.create_polygon(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], self.point3["x"], self.point3["y"], self.point4["x"], self.point4["y"], fill=self.fill_color, outline=self.outline_color, width=self.outline_width, tags=_TAG)
+        self._INFO_KEYS.update(point1="Point1", point2="Point2", point3="Point3", point4="Point4")
 
     def rotate(self, angle):
         self.point1.update(_calc_rotate(self.rotate_point, self.point1, angle))
@@ -547,7 +564,9 @@ class Ellipse(Figure):
         self.point1 = {"x":x-width/2, "y":y-height/2}
         self.point2 = {"x":x+width/2, "y":y+height/2}
         self.figure = CANVAS.create_oval(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], fill=self.fill_color, outline=self.outline_color, width=self.outline_width, tags=_TAG)
-
+        self._INFO_KEYS.update(figure_center_point="CenterPoint", size="Size")
+        self._EXCLUSION_KEYS.extend(["point1", "point2"])
+        
     def rotate(self, angle):
         self.figure_center_point.update(_calc_rotate(self.rotate_point, self.figure_center_point, angle))
         self.point1.update({"x":self.figure_center_point["x"]-self.size["width"]/2, "y":self.figure_center_point["y"]-self.size["height"]/2})
@@ -564,6 +583,8 @@ class Point(Figure):
         self.point1 = {"x":x-size/2, "y":y-size/2}
         self.point2 = {"x":x+size/2, "y":y+size/2}
         self.figure = CANVAS.create_oval(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], fill=self.fill_color, outline=self.outline_color, tags=_TAG)
+        self._INFO_KEYS.update(figure_center_point="CenterPoint", size="Size")
+        self._EXCLUSION_KEYS.extend(["point1", "point2"])
 
     def rotate(self, angle):
         self.figure_center_point.update(_calc_rotate(self.rotate_point, self.figure_center_point, angle))
@@ -593,6 +614,8 @@ class Arc(Figure):
         self.interior_angle = interiorAngle
         self.outline_style = "pieslice"
         self.figure = CANVAS.create_arc(self.point1["x"], self.point1["y"], self.point2["x"], self.point2["y"], start=self.start_angle, extent=self.interior_angle, fill=self.fill_color, outline=self.outline_color, width=self.outline_width, style=self.outline_style, tags=_TAG)
+        self._INFO_KEYS.update(figure_center_point="CenterPoint", size="Size", start_angle="StartAngle", interior_angle="IntoriorAngle", outline_style="OutlineStyle")
+        self._EXCLUSION_KEYS.extend(["point1", "point2"])
 
     def rotate(self, angle):
         self.figure_center_point.update(_calc_rotate(self.rotate_point, self.figure_center_point, angle))
@@ -616,11 +639,14 @@ class Text():
         self.font_name = _DEFAULT_FONT
         self.fontsize = 20
         self.center_point = {"x":x, "y":y}
-        self.text = CANVAS.create_text(x, y, text=text, font=(self.font,self.fontsize), fill="black", tags=_TAG)
+        self.text = text
+        self.figure = CANVAS.create_text(x, y, text=self.text, font=(self.font, self.fontsize), fill="black", tags=_TAG)
         self.rotate_point = {"x":0, "y":0}
+        self._INFO_KEYS = {"center_point":"CenterPoint", "text":"Text", "font_name":"FontName", "fontsize":"FontSize", "rotate_point":"BasePoint", "fill_color":"Color"}
+        self._EXCLUSION_KEYS = ["figure", "_INFO_KEYS", "_EXCLUSION_KEYS"]
         
     def font(self, fontName, fontSize):
-        fontName = self.font_name if fontName=="" else fontName
+        fontName = self.font_name if fontName == "" else fontName
         if _OS == "Linux":
             fontName = "Noto Serif CJK JP"
         if fontName not in _FONTS:
@@ -628,25 +654,29 @@ class Text():
             raise FontError(f"{fontName}は使用可能なフォントではありません")
         self.font_name = fontName
         self.fontsize = fontSize
-        CANVAS.itemconfigure(self.text,font=(self.font_name,self.fontsize))
+        CANVAS.itemconfigure(self.figure, font=(self.font_name, self.fontsize))
         return self
         
     def fill(self, color):
         _checkColor(color)
-        CANVAS.itemconfigure(self.text, fill=color)
+        self.fill_color = color
+        CANVAS.itemconfigure(self.figure, fill=color)
         return self
         
     def rotate(self, angle):
         self.center_point.update(_calc_rotate(self.rotate_point, self.center_point, angle))
-        CANVAS.coords(self.text, self.center_point["x"], self.center_point["y"])
+        CANVAS.coords(self.figure, self.center_point["x"], self.center_point["y"])
         return self
 
     def changeBasePoint(self, base_x, base_y):
         self.rotate_point.update({"x":base_x, "y":base_y})
         return self
     
+    def getInfo(self):
+        return {self._INFO_KEYS[k]: v for k, v in vars(self).items() if k not in self._EXCLUSION_KEYS}
+    
     def delete(self):
-        CANVAS.delete(self.text)
+        CANVAS.delete(self.figure)
 
 # image class
 def loadImage(filename):
@@ -670,6 +700,8 @@ class Image():
         self.image_file = tkinter.PhotoImage(file=filepath)
         self.image = None
         self.anchor = "center"
+        self._INFO_KEYS = {"image_file":"FilePath", "anchor":"AnchorPoint"}
+        self._EXCLUSION_KEYS = ["image", "_INFO_KEYS_", "_EXCLUSION_KEYS"]
             
     def changeAnchor(self):
         self.anchor = "nw" if self.anchor=="center" else "center"
@@ -680,6 +712,9 @@ class Image():
             CANVAS.delete(self.image)
         self.image = CANVAS.create_image(x, y, anchor=self.anchor, image=self.image_file)
         return self
+    
+    def getInfo(self):
+        return {self._INFO_KEYS[k]: v for k, v in vars(self).items() if k not in self._EXCLUSION_KEYS}
     
     def delete(self):
         CANVAS.delete(self.image)
@@ -705,7 +740,13 @@ def loadMusic(filename):
 class Music:
     def __init__(self, filepath):
         self.music_path = filepath
-        self.process = None        
+        self.process = None
+        self._INFO_KEYS = {"music_file":"FilePath"}
+        self._EXCLUSION_KEYS = ["process", "_INFO_KEYS_", "_EXCLUSION_KEYS"]   
+    
+    def getInfo(self):
+        return {self._INFO_KEYS[k]: v for k, v in vars(self).items() if k not in self._EXCLUSION_KEYS}
+ 
 
     def play(self):
         if self.process is None :
