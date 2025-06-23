@@ -368,7 +368,7 @@ class Window:
         CANVAS.configure(background=self.background_color)
         return self
     
-    def info(self):
+    def getInfo(self):
         return {"title":self.title_text, "width":_CANVAS_WIDTH, "height":_CANVAS_HEIGHT, "background_color":self.background_color}
         
     def show(self):
@@ -464,7 +464,7 @@ class Figure:
         self.rotate_point.update({"x":base_x, "y":base_y})
         return self
     
-    def info(self):
+    def getInfo(self):
         return {k: v for k, v in vars(self).items() if k != "figure"}
         
     def delete(self):
@@ -658,7 +658,7 @@ class Text():
         self.rotate_point.update({"x":base_x, "y":base_y})
         return self
     
-    def info(self):
+    def getInfo(self):
         return {k: v for k, v in vars(self).items() if k != "figure"}
     
     def delete(self):
