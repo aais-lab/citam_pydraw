@@ -692,9 +692,9 @@ def loadImage(filename):
         if not _IS_ALL_TRACE : _TraceBack()
         raise LoadingException(f"指定されたファイルがないか、ファイルではありません。\n指定されたファイル：{filepath}")
     
-    if not (filepath.suffix in ['.pgm','.ppm','.gif','.png','.xbm',".jpg"]):
+    if not (filepath.suffix in ['.png','.jpg']):
         if not _IS_ALL_TRACE : _TraceBack()
-        raise FileTypeError("指定されたファイルは対応しているファイル形式ではありません。PGM,PPM,GIF,PNG,XBMのいずれかの画像ファイルを指定してください。")
+        raise FileTypeError("指定されたファイルは対応しているファイル形式ではありません。PNG もしくは JPEG の画像ファイルを指定してください。")
     return Image(filepath)
     
 class Image():
