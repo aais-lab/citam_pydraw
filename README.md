@@ -15,8 +15,9 @@ tkinterのWrapperで、[Processing](https://processing.org/)ライクに動作�
 - Python3.10.5 <
   - 動作確認済み >=3.12.2
   - MacのSystem DefaultのPython環境にはライブラリを入れることができないため注意してください
-- Pythonの標準ライブラリのみで動作
-  - tkinter 8.6以上が必須
+- 必要なライブラリ
+  - tkinter 8.6以上
+  - Pillow 11.2以上
   - brew + pyenv環境の場合、対応したpython-tkが必要です
 - 音楽再生用コマンド
   - MacOS: afplay
@@ -32,6 +33,7 @@ tkinterのWrapperで、[Processing](https://processing.org/)ライクに動作�
 - ライブラリ
   - Python標準
   - tkinter 8.6
+  - Pillow 11.2.1
 
 ### 環境構築の既知トラブル
 #### MacOSかつpython3.10系の場合
