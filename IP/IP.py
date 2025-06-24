@@ -200,18 +200,18 @@ def keyReleased(func: function) -> function:
 
 # callable function
 # NOTE:ウィンドウの最大サイズを変化できるようにしてほしいという要望があったため追加
-def windowMaxSize(width, height):
+def windowMaxSize(width: int, height: int) -> None:
     global MAX_WIDTH, MAX_HEIGHT
     MAX_WIDTH, MAX_HEIGHT  = width, height
 
-def colorMode(colorMode):
+def colorMode(colorMode: str) -> None:
     if colorMode not in ["HSV", "RGB"]:
         if not _IS_ALL_TRACE :_TraceBack()
         raise ColorError(f"{colorMode} は対応しているカラーモードではありません。HSVもしくはRGBが指定できます")
     global COLOR_MORD
     COLOR_MORD = colorMode
     
-def color(v1, v2, v3):
+def color(v1: int, v2: int, v3: int):
     # NOTE: 先生に相談したところ、floatは許容しないとのことだったため修正
     # NOTE: 値のいずれかのみの型が異なっていた場合に正しくerrorを吐かなかったため修正
     if type(v1)!=int or type(v2)!=int or type(v3)!=int:
@@ -232,7 +232,7 @@ def color(v1, v2, v3):
         v1, v2, v3 = int(v1*255), int(v2*255), int(v3*255)
     return "#"+format(v1,'02x')+format(v2,'02x')+format(v3,'02x')
 
-def availableColors(colorname='all'):
+def availableColors(colorname: str ='all'):
     if colorname != 'all':
         if colorname in _COLOR:
             print(f"{colorname}は使用可能です")
@@ -254,7 +254,7 @@ def availableColors(colorname='all'):
         frame.pack(expand=1, fill="both")
         root.mainloop()
     
-def availableFonts(fontname='all'):
+def availableFonts(fontname: str ='all'):
     root = tkinter.Tk()
     fontlist = list(font.families(root))
     if fontname != 'all':
@@ -284,29 +284,29 @@ def stop():
     global _IS_DRAW_MOVED
     _IS_DRAW_MOVED = False
 
-def date():
+def date() -> str:
     date = datetime.datetime.now()
     return f"{date.year}-{date.month}-{date.day}"
 
-def year():
+def year() -> int:
     return datetime.datetime.now().year
 
-def month():
+def month() -> int:
     return datetime.datetime.now().month
 
-def day():
+def day() -> int:
     return datetime.datetime.now().day
 
-def hour():
+def hour() -> int:
     return datetime.datetime.now().hour
 
-def minute():
+def minute() -> int:
     return datetime.datetime.now().minute
 
-def second():
+def second() -> int:
     return datetime.datetime.now().second
 
-def animationSpeed(rate):
+def animationSpeed(rate: int):
     if type(rate) != int:
         if not _IS_ALL_TRACE : _TraceBack()
         raise ValueError(f"{rate} は整数値ではありません")
@@ -317,7 +317,7 @@ def animationSpeed(rate):
     _RATE = 101 - rate
     
 # internal function
-def _calc_rotate(basePoint, movePoint, angle):
+def _calc_rotate(basePoint: dict, movePoint: dict, angle: int|float) -> dict:
     point = {}
     point["x"] = (movePoint["x"]-basePoint["x"]) * math.cos(math.radians(angle)) - (movePoint["y"]-basePoint["y"]) * math.sin(math.radians(angle)) +basePoint["x"]
     point["y"] = (movePoint["x"]-basePoint["x"]) * math.sin(math.radians(angle)) + (movePoint["y"]-basePoint["y"]) * math.cos(math.radians(angle)) +basePoint["y"]
