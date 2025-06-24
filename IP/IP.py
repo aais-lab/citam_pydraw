@@ -16,7 +16,7 @@ import re
 import inspect
 import sys
 from pathlib import Path
-from typing import Final, List, Pattern
+from typing import Final, Pattern, Type
 from PIL import Image as PILImage
 from PIL import ImageTk
 from . import mouse
@@ -42,7 +42,7 @@ MAX_WIDTH: int = 1000
 
 # canvas
 _ROOT: tkinter.Tk | None = None
-CANVAS: tkinter.Canvas | None = None
+CANVAS: '_Canvas_' | None = None
 _CANVAS_WIDTH: int = 500
 _CANVAS_HEIGHT: int = 500
 _IS_DRAW_MOVED: bool = True
@@ -325,11 +325,11 @@ def _calc_rotate(basePoint: dict, movePoint: dict, angle: int|float) -> dict:
 
 # window class
 class Window:
-    def __init__(self, width=500, height=500, background="white"):
+    def __init__(self, width: int =500, height: int =500, background: str ="white") -> 'Window':
         global CANVAS, _CANVAS_WIDTH, _CANVAS_HEIGHT, _FONTS, _ROOT
         
-        self.title_text = None
-        self.background_color = background
+        self.title_text: str|None = None
+        self.background_color: str = background
         
         if MAX_WIDTH < width or MAX_HEIGHT < height:
             print(MAX_WIDTH < width, MAX_HEIGHT < height)
@@ -338,15 +338,15 @@ class Window:
         _CANVAS_HEIGHT, _CANVAS_WIDTH = height, width
         _checkColor(background)
         
-        _ROOT = tkinter.Tk()
+        _ROOT: tkinter.Tk = tkinter.Tk()
         _FONTS = list(font.families(_ROOT))
         _ROOT.resizable(width=False, height=False)
         # _ROOT.wm_maxsize(width=MAX_WIDTH, height=MAX_HEIGHT)
         _ROOT.geometry('{}x{}+0+0'.format(str(_CANVAS_WIDTH), str(_CANVAS_HEIGHT)))
-        CANVAS = _Canvas_(_ROOT, background=background)
+        CANVAS: '_Canvas_' = _Canvas_(_ROOT, background=background)
         CANVAS.pack(expand=True, fill=tkinter.BOTH)
     
-    def size(self, width, height):
+    def size(self, width: int, height: int) -> 'Window':
         global _CANVAS_WIDTH, _CANVAS_HEIGHT
         if MAX_WIDTH < width or MAX_HEIGHT < height:
             if not _IS_ALL_TRACE : _TraceBack()
@@ -356,12 +356,12 @@ class Window:
         _ROOT.geometry('{}x{}+0+0'.format(str(_CANVAS_WIDTH), str(_CANVAS_HEIGHT)))
         return self
         
-    def title(self, title):
+    def title(self, title: str) -> 'Window':
         self.title_text = title
         _ROOT.title(str(self.title_text))
         return self
         
-    def background(self, background):
+    def background(self, background: str) -> 'Window':
         if isinstance(background, Image):
             if not _IS_ALL_TRACE : _TraceBack()
             raise BackgroundException("背景色に画像を指定することはできません") from None
@@ -370,16 +370,16 @@ class Window:
         CANVAS.configure(background=self.background_color)
         return self
     
-    def getInfo(self):
+    def getInfo(self) -> dict:
         return {"Object":self.__class__.__name__, "Title":self.title_text, "Size":{"Width":_CANVAS_WIDTH, "Height":_CANVAS_HEIGHT}, "BackgroundColor":self.background_color}
         
-    def show(self):
+    def show(self) -> None:
         _ROOT.mainloop()
         
 
 # canvas class
 class _Canvas_(tkinter.Canvas):
-    def __init__(self, master, background):
+    def __init__(self, master: tkinter.Tk, background: str):
         super().__init__(
             master,
             background=background,
