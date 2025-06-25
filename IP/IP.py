@@ -141,7 +141,7 @@ def animation(isAnimated: bool):
     return _ani
 
 # event
-def mouseMoved(func: function):
+def mouseMoved(func):
     def _reg(*args, **kwargs):
         def tmp():
             if not mouse.isPressed:
@@ -150,7 +150,7 @@ def mouseMoved(func: function):
         CANVAS.bind("<Motion>", tmp())
     return _reg
 
-def mousePressed(func: function):
+def mousePressed(func):
     def _reg(*args, **kwargs):
         def tmp():
             global _IS_MOUSE_PRESSED_BEFORE
@@ -160,7 +160,7 @@ def mousePressed(func: function):
         CANVAS.bind("<ButtonPress>", tmp())
     return _reg
 
-def mouseReleased(func: function):
+def mouseReleased(func):
     def _reg(*args, **kwargs):
         def tmp():
             global _IS_MOUSE_PRESSED_BEFORE
@@ -170,7 +170,7 @@ def mouseReleased(func: function):
         CANVAS.bind("<ButtonRelease>", tmp())
     return _reg
 
-def mouseDragged(func: function):
+def mouseDragged(func):
     def _reg(*args, **kwargs):
         def tmp():
             if mouse.isPressed:
@@ -179,7 +179,7 @@ def mouseDragged(func: function):
         CANVAS.bind("<Motion>", tmp())
     return _reg
 
-def keyPressed(func: function):
+def keyPressed(func):
     def _reg(*args, **kwargs):
         def tmp():
             if keyboard.isPressed:
@@ -187,7 +187,7 @@ def keyPressed(func: function):
         CANVAS.bind("<KeyPressed>", tmp())
     return _reg
 
-def keyReleased(func: function):
+def keyReleased(func):
     def _reg(*args, **kwargs):
         def tmp():
             global _IS_KEY_PRESSED_BEFORE
