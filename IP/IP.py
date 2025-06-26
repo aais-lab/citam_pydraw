@@ -198,7 +198,6 @@ def keyReleased(func):
 
 
 # callable function
-# NOTE:ウィンドウの最大サイズを変化できるようにしてほしいという要望があったため追加
 def windowMaxSize(width: int, height: int) -> None:
     global MAX_WIDTH, MAX_HEIGHT
     MAX_WIDTH, MAX_HEIGHT  = width, height
@@ -211,8 +210,6 @@ def colorMode(colorMode: str) -> None:
     COLOR_MORD = colorMode
     
 def color(v1: int, v2: int, v3: int):
-    # NOTE: 先生に相談したところ、floatは許容しないとのことだったため修正
-    # NOTE: 値のいずれかのみの型が異なっていた場合に正しくerrorを吐かなかったため修正
     if type(v1)!=int or type(v2)!=int or type(v3)!=int:
         if not _IS_ALL_TRACE : _TraceBack()
         raise ColorError(f"color({v1},{v2},{v3}) で指定されたいずれかの値が整数ではありません")
