@@ -8,7 +8,7 @@ description = "CIT-AM Introduction Programming class lib"
 readme = "README.md"
 license = "BSD-3-Clause"
 license-files = ["LICEN[CS]E.*"]
-requires-python = ">=3.10.5"
+requires-python = " >= 3.10.5"
 dependencies = [
     "pillow >=11.2"
 ]
@@ -19,6 +19,7 @@ maintainers = [
 dynamic = ["version"]
 classifiers = [
     "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3 :: Only",
@@ -26,6 +27,6 @@ classifiers = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/aais-lab/citam_pydraw.git"
+Documentation = "https://github.com/aais-lab/citam_pydraw/wiki"
 Source = "https://github.com/aais-lab/citam_pydraw.git"
 Issues = "https://github.com/aais-lab/citam_pydraw/issues"
