@@ -103,7 +103,7 @@ cd citam_pydraw
 pip install .
 ```
 
-Successfully installed IP-x.x.xと表示されれば導入完了です。
+Successfully installed citam_pydraw-x.x.xと表示されれば導入完了です。
 
 # Reference
 関数等のリファレンス
