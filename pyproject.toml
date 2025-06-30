@@ -13,6 +13,9 @@ dependencies = [
     "pillow >=11.2"
 ]
 authors = [  { name="Nao Yamanouchi", email="nao.yamanouchi@ga.aais-lab.org"},]
+maintainers = [
+   { name="Nao Yamanouchi", email="nao.yamanouchi@ga.aais-lab.org"}
+]
 dinamic = {"version"}
 
 classifiers = [
