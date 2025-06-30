@@ -3,3 +3,4 @@
 .DS_Store
 src/citam_pydraw/__pycache__
 /tests
+dist/
