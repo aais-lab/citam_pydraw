@@ -74,7 +74,7 @@ brew install python-tk@3.x
 ```
 の際は、python-tkのバージョンをインストールしたいPythonのバージョンに合わせて指定してください。
 
-### import IP 実行時にModuleNotFoundErrorが出て、エラー箇所がimport IP.IPの場合
+### import IP 実行時にModuleNotFoundErrorが出て、エラー箇所がimport IP.IPの場合（旧）
 他にも以下パターンは同様の原因です。
 ```
 ModuleNotFoundError: No module named "IP.mouse"
