@@ -4,17 +4,22 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "citam_pydraw"
-authors = [  { name="Nao Yamanouchi", email="nao.yamanouchi@ga.aais-lab.org"},]
 description = "CIT-AM Introduction Programming class lib"
 readme = "README.md"
 license = "LICENSE.txt"
 requires-python = ">=3.10.5"
+dependencies = [
+    "tkinter >=8.6",
+    "pillow >=11.2"
+]
+authors = [  { name="Nao Yamanouchi", email="nao.yamanouchi@ga.aais-lab.org"},]
 dinamic = {"version"}
 
-[tool.poetry.group.dev.dependencies]
-tkinter = "^8.6"
-pillow = "^11.2"
+classifiers = [
+  "Programming Language :: Python"
+]
 
 [project.urls]
-Documentation = "https://flit.pypa.io"
-Source = "https://github.com/pypa/flit"
+Documentation = "https://github.com/aais-lab/citam_pydraw.git"
+Source = "https://github.com/aais-lab/citam_pydraw.git"
+Issues = "https://github.com/aais-lab/citam_pydraw/issues"
