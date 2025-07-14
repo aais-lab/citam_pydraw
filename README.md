@@ -35,6 +35,25 @@ tkinterのWrapperで、[Processing](https://processing.org/)ライクに動作�
   - tkinter 8.6
   - Pillow 11.2.1
 
+# Usage
+## PyPIから
+```
+pip install citam_pydraw
+```
+
+## gitから
+### クローン
+```
+git clone https://github.com/aais-lab/citam_pydraw.git
+```
+### ライブラリのフォルダへ移動して、pip install
+```
+cd citam_pydraw
+pip install .
+```
+
+Successfully installed citam_pydraw-x.x.xと表示されれば導入完了です。
+
 ## 環境構築の既知トラブル
 ### MacOSかつpython3.10系の場合
 tkinter8.5がデフォルトで入っているようですが、[Pythonとtcl/tkの対応問題](https://www.python.org/download/mac/tcltk/)によって実行時にWindowが黒く表示される不具合が発生します。
@@ -85,25 +104,6 @@ ModuleNotFoundError: No module named "IP.keyboard"
 ダウンロードもしくは展開をやり直して、以下のファイルが全てあることを確認してください。
 
 <img width="222" alt="IPファイル構成" src="https://github.com/aais-lab/IntroductionPrograming-library/assets/75377571/97f7fa3f-47e3-4e3f-8c2d-8a0ccf99f1ad">
-
-# Usage
-## PyPIから
-```
-pip install citam_pydraw
-```
-
-## gitから
-### クローン
-```
-git clone https://github.com/aais-lab/citam_pydraw.git
-```
-### ライブラリのフォルダへ移動して、pip install
-```
-cd citam_pydraw
-pip install .
-```
-
-Successfully installed citam_pydraw-x.x.xと表示されれば導入完了です。
 
 # Reference
 関数等のリファレンス
