@@ -700,7 +700,7 @@ class Image():
         self.image = None
         self.anchor = "center"
         self.angle = 0
-        self._INFO_KEYS = {"file_path":"FilePath", "anchor":"AnchorPoint", "angle":"Angle"}
+        self._INFO_KEYS = {"file_path":"FilePath", "anchor":"AnchorPoint", "angle":"Angle", "center_point":"DrawPoint"}
         self._EXCLUSION_KEYS = ["image", "image_file", "_INFO_KEYS", "_EXCLUSION_KEYS"]
             
     def changeAnchor(self) -> 'Image':
@@ -712,6 +712,7 @@ class Image():
         return self
         
     def show(self, x: int|float, y: int|float) -> None:
+        self.center_point = {"x":x, "y":y}
         if self.image is not None:
             CANVAS.delete(self.image)
         tmp_img = PILImage.open(self.file_path).convert("RGBA")
