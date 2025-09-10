@@ -700,6 +700,7 @@ class Image():
         self.image = None
         self.anchor = "center"
         self.angle = 0
+        self.center_point = {"x":None, "y":None}
         self._INFO_KEYS = {"file_path":"FilePath", "anchor":"AnchorPoint", "angle":"Angle", "center_point":"DrawPoint"}
         self._EXCLUSION_KEYS = ["image", "image_file", "_INFO_KEYS", "_EXCLUSION_KEYS"]
             
