@@ -96,15 +96,6 @@ class EnvironmentException(Exception):
 class ProcessingIsLaggy(Exception):
     pass
 
-# default font
-_DEFAULT_FONT = ""
-if _OS == "Darwin":
-    _DEFAULT_FONT = "Helvetica"
-elif _OS == "Windows":
-    _DEFAULT_FONT = "Segoe UI"
-elif _OS == "Linux":
-    _DEFAULT_FONT = "Noto Serif CJK JP"
-
 def _checkColor(arg):
     if arg in _COLOR or _COLOR_CORD.fullmatch(arg):
         return
@@ -241,7 +232,7 @@ def availableColors(colorname: str ='all'):
         c = 0
         frame = tkinter.Frame(root)
         for color in _COLOR:
-            label = tkinter.Label(frame, text=color, bg=color,font=(_DEFAULT_FONT, 10, "bold"))
+            label = tkinter.Label(frame, text=color, bg=color)
             label.grid(row=r, column=c, sticky="ew")
             r += 1
             if r > 36:
@@ -635,23 +626,21 @@ class Arc(Figure):
 # text class
 class Text():
     def __init__(self, text: str, x: int|float, y: int|float):
-        self.font_name = _DEFAULT_FONT
+        self.font_name = "TkDefaultFont"
         self.fontsize = 20
         self.center_point = {"x":x, "y":y}
         self.text = text
-        self.figure = CANVAS.create_text(x, y, text=self.text, font=(self.font, self.fontsize), fill="black", tags=_TAG)
+        self.figure = CANVAS.create_text(x, y, text=self.text, font=(self.font_name, self.fontsize), fill="black", tags=_TAG)
         self.rotate_point = {"x":0, "y":0}
         self._INFO_KEYS = {"center_point":"CenterPoint", "text":"Text", "font_name":"FontName", "fontsize":"FontSize", "rotate_point":"RotationCenter", "fill_color":"Color"}
         self._EXCLUSION_KEYS = ["figure", "_INFO_KEYS", "_EXCLUSION_KEYS"]
         
     def font(self, fontName: str, fontSize: int) -> 'Text':
-        fontName = self.font_name if fontName == "" else fontName
-        if _OS == "Linux":
-            fontName = "Noto Serif CJK JP"
-        if fontName not in _FONTS:
-            if not _IS_ALL_TRACE : _TraceBack()
-            raise FontError(f"{fontName}は使用可能なフォントではありません")
-        self.font_name = fontName
+        if fontName != "":
+            if fontName not in _FONTS:
+                if not _IS_ALL_TRACE : _TraceBack()
+                raise FontError(f"{fontName}は使用可能なフォントではありません")
+            self.font_name = fontName
         self.fontsize = fontSize
         CANVAS.itemconfigure(self.figure, font=(self.font_name, self.fontsize))
         return self
