@@ -641,7 +641,7 @@ class Text():
         self.text = text
         self.figure = CANVAS.create_text(x, y, text=self.text, font=(self.font, self.fontsize), fill="black", tags=_TAG)
         self.rotate_point = {"x":0, "y":0}
-        self._INFO_KEYS = {"center_point":"CenterPoint", "text":"Text", "font_name":"FontName", "fontsize":"FontSize", "rotate_point":"BasePoint", "fill_color":"Color"}
+        self._INFO_KEYS = {"center_point":"CenterPoint", "text":"Text", "font_name":"FontName", "fontsize":"FontSize", "rotate_point":"RotationCenter", "fill_color":"Color"}
         self._EXCLUSION_KEYS = ["figure", "_INFO_KEYS", "_EXCLUSION_KEYS"]
         
     def font(self, fontName: str, fontSize: int) -> 'Text':
