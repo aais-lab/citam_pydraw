@@ -1,11 +1,32 @@
-[project]
-name = "IP"
-version = '1.5.6'
-authors = [  { name="Nao Yamanouchi" },]
-description = "CIT Introduction Programming class lib"
-license = {text = "3-Clause BSD License"}
-requires-python = ">=3.10.5"
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
 
-[tool.poetry.group.dev.dependencies]
-tkinter = "^8.6"
-pillow = "^11.2"
+[project]
+name = "citam_pydraw"
+description = "CIT-AM Introduction Programming class lib"
+readme = "README.md"
+license = "BSD-3-Clause"
+license-files = ["LICEN[CS]E.*"]
+requires-python = " >= 3.10.5"
+dependencies = [
+    "pillow >=11.2"
+]
+authors = [  { name="Nao Yamanouchi", email="nao.yamanouchi@ga.aais-lab.org"},]
+maintainers = [
+   { name="Nao Yamanouchi", email="nao.yamanouchi@ga.aais-lab.org"}
+]
+dynamic = ["version"]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3 :: Only",
+    "Operating System :: MacOS"
+]
+
+[project.urls]
+Documentation = "https://github.com/aais-lab/citam_pydraw/wiki"
+Source = "https://github.com/aais-lab/citam_pydraw.git"
+Issues = "https://github.com/aais-lab/citam_pydraw/issues"

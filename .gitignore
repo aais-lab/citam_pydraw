@@ -1,5 +1,6 @@
 /IP.egg-info
 /build
 .DS_Store
-/IP/__pycache__
-/test
+src/citam_pydraw/__pycache__
+/tests
+dist/
