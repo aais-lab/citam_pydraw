@@ -460,7 +460,7 @@ class Figure:
         CANVAS.itemconfigure(self.figure, width=self.outline_width)
         return self
         
-    def changeBasePoint(self, base_x: int, base_y: int):
+    def setRotationCenter(self, base_x: int, base_y: int):
         self.rotate_point.update({"x":base_x, "y":base_y})
         return self
     
@@ -641,7 +641,7 @@ class Text():
         self.text = text
         self.figure = CANVAS.create_text(x, y, text=self.text, font=(self.font, self.fontsize), fill="black", tags=_TAG)
         self.rotate_point = {"x":0, "y":0}
-        self._INFO_KEYS = {"center_point":"CenterPoint", "text":"Text", "font_name":"FontName", "fontsize":"FontSize", "rotate_point":"BasePoint", "fill_color":"Color"}
+        self._INFO_KEYS = {"center_point":"CenterPoint", "text":"Text", "font_name":"FontName", "fontsize":"FontSize", "rotate_point":"RotationCenter", "fill_color":"Color"}
         self._EXCLUSION_KEYS = ["figure", "_INFO_KEYS", "_EXCLUSION_KEYS"]
         
     def font(self, fontName: str, fontSize: int) -> 'Text':
@@ -667,7 +667,7 @@ class Text():
         CANVAS.coords(self.figure, self.center_point["x"], self.center_point["y"])
         return self
 
-    def changeBasePoint(self, base_x: int|float, base_y: int|float) -> 'Text':
+    def setRotationCenter(self, base_x: int|float, base_y: int|float) -> 'Text':
         self.rotate_point.update({"x":base_x, "y":base_y})
         return self
     
@@ -700,7 +700,8 @@ class Image():
         self.image = None
         self.anchor = "center"
         self.angle = 0
-        self._INFO_KEYS = {"file_path":"FilePath", "anchor":"AnchorPoint", "angle":"Angle"}
+        self.center_point = {"x":None, "y":None}
+        self._INFO_KEYS = {"file_path":"FilePath", "anchor":"AnchorPoint", "angle":"Angle", "center_point":"DrawPoint"}
         self._EXCLUSION_KEYS = ["image", "image_file", "_INFO_KEYS", "_EXCLUSION_KEYS"]
             
     def changeAnchor(self) -> 'Image':
@@ -712,6 +713,7 @@ class Image():
         return self
         
     def show(self, x: int|float, y: int|float) -> None:
+        self.center_point = {"x":x, "y":y}
         if self.image is not None:
             CANVAS.delete(self.image)
         tmp_img = PILImage.open(self.file_path).convert("RGBA")
