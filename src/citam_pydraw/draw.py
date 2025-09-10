@@ -460,7 +460,7 @@ class Figure:
         CANVAS.itemconfigure(self.figure, width=self.outline_width)
         return self
         
-    def changeBasePoint(self, base_x: int, base_y: int):
+    def setRotationCenter(self, base_x: int, base_y: int):
         self.rotate_point.update({"x":base_x, "y":base_y})
         return self
     
@@ -667,7 +667,7 @@ class Text():
         CANVAS.coords(self.figure, self.center_point["x"], self.center_point["y"])
         return self
 
-    def changeBasePoint(self, base_x: int|float, base_y: int|float) -> 'Text':
+    def setRotationCenter(self, base_x: int|float, base_y: int|float) -> 'Text':
         self.rotate_point.update({"x":base_x, "y":base_y})
         return self
     
