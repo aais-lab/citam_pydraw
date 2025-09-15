@@ -55,6 +55,41 @@ _COLOR = ['black','white','snow', 'ghost white', 'white smoke', 'gainsboro', 'fl
 _COLOR_CORD: Pattern[str] = compile('^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$')
 _FONTS = None
 
+# Date Class
+class _Date:
+    def __init__(self):
+        pass
+    
+    @property
+    def date(self) -> str:
+        now = datetime.datetime.now()
+        return f"{now.year}-{now.month}-{now.day}"
+    
+    @property
+    def year(self) -> int:
+        return datetime.datetime.now().year
+
+    @property
+    def month(self) -> int:
+        return datetime.datetime.now().month
+
+    @property
+    def day(self) -> int:
+        return datetime.datetime.now().day
+
+    @property
+    def hour(self) -> int:
+        return datetime.datetime.now().hour
+
+    @property
+    def minute(self) -> int:
+        return datetime.datetime.now().minute
+
+    @property
+    def second(self) -> int:
+        return datetime.datetime.now().second
+date = _Date()
+
 # key pressed before
 _IS_KEY_PRESSED_BEFORE = False
 _IS_MOUSE_PRESSED_BEFORE = False
@@ -264,28 +299,6 @@ def stop():
     global _IS_DRAW_MOVED
     _IS_DRAW_MOVED = False
 
-def date() -> str:
-    date = datetime.datetime.now()
-    return f"{date.year}-{date.month}-{date.day}"
-
-def year() -> int:
-    return datetime.datetime.now().year
-
-def month() -> int:
-    return datetime.datetime.now().month
-
-def day() -> int:
-    return datetime.datetime.now().day
-
-def hour() -> int:
-    return datetime.datetime.now().hour
-
-def minute() -> int:
-    return datetime.datetime.now().minute
-
-def second() -> int:
-    return datetime.datetime.now().second
-
 def animationSpeed(rate: int):
     if type(rate) != int:
         if not _IS_ALL_TRACE : _TraceBack()
@@ -301,7 +314,7 @@ def _calc_rotate(basePoint: dict, movePoint: dict, angle: int|float) -> dict:
     point = {}
     point["x"] = (movePoint["x"]-basePoint["x"]) * cos(radians(angle)) - (movePoint["y"]-basePoint["y"]) * sin(radians(angle)) +basePoint["x"]
     point["y"] = (movePoint["x"]-basePoint["x"]) * sin(radians(angle)) + (movePoint["y"]-basePoint["y"]) * cos(radians(angle)) +basePoint["y"]
-    return point
+    return point        
 
 # window class
 class Window:
