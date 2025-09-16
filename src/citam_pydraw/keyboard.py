@@ -1,4 +1,4 @@
-key = ""
-code = ""
-char = ""
-isPressed = False
+# key = ""
+# code = ""
+# char = ""
+# isPressed = False

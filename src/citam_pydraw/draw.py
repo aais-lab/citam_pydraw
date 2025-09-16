@@ -1,5 +1,5 @@
 ###
-# プログラミング基礎 v1.5.6
+# プログラミング基礎 v3
 ###
 import tkinter
 import tkinter.font as font
@@ -17,8 +17,6 @@ from typing import Final, Pattern, Never
 from PIL import Image as PILImage
 from PIL import ImageTk
 from just_playback import Playback
-# from . import _mouse
-# from . import _keyboard
 
 # stack trace
 def allTraceBack():
@@ -309,7 +307,7 @@ def mouseDragged(func):
         def tmp():
             if _mouse.isPressed:
                 func(*args, **kwargs)
-                _mouse.pressX, _mouse.pressY = _mouse.X, _mouse.Y
+                _mouse._pressX, _mouse._pressY = _mouse.X, _mouse.Y
         Window.CANVAS().bind("<Motion>", tmp())
     return _reg
 
