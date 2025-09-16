@@ -7,21 +7,18 @@ tkinterのWrapperで、[Processing](https://processing.org/)ライクに動作�
 # Requirement
 ## 必要環境
 - MacOS
-  - Windowsでも使用可能ですが、音楽を再生する機能のみ使用不可です
-    - 今後のバージョンでは対応しなくなる可能性があります
-  - Linux環境も一応ですが対応しています
+  - Windowsでも使用可能ですが、非推奨かつサポート範囲外です
+    - 詳細な動作確認はしておらず、対応予定もありません
+  - Linux環境は一応ですが対応しています
     - Docker環境の用意があります -> [IPが導入されるPython環境(Docker版)](https://github.com/aais-lab/PythonEnv_docker)
-    - 音楽再生はmpvコマンドによって実装しています
 - Python >3.10.5
   - 動作確認済み >=3.12.2
   - MacのSystem DefaultのPython環境にはライブラリを入れることができないため注意してください
 - 必要なライブラリ
   - tkinter 8.6以上
   - Pillow 11.2以上
+  - just-playback 0.1.8以上
   - brew + pyenv環境の場合、対応したpython-tkが必要です
-- 音楽再生用コマンド
-  - MacOS: afplay
-  - Linux: mpv
 
 ## 開発・動作確認環境
 - MacOS Ventura以降
@@ -34,6 +31,7 @@ tkinterのWrapperで、[Processing](https://processing.org/)ライクに動作�
   - Python標準
   - tkinter 8.6
   - Pillow 11.2.1
+  - just-playback 0.1.8
 
 # Usage
 ## PyPIから
@@ -106,7 +104,9 @@ ModuleNotFoundError: No module named "IP.keyboard"
 <img width="222" alt="IPファイル構成" src="https://github.com/aais-lab/IntroductionPrograming-library/assets/75377571/97f7fa3f-47e3-4e3f-8c2d-8a0ccf99f1ad">
 
 # Reference
-関数等のリファレンス
+関数・クラス等の詳細は[Wiki](https://github.com/aais-lab/citam_pydraw/wiki)を参照してください。
+
+関数等のリファレンス(旧)
 [IntroductionPrograming-Reference](https://aais-lab.github.io/IntroductionPrograming-Reference/)
 
 # Author
