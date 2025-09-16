@@ -90,6 +90,8 @@ class KeyBoard:
         self._char = ""
         self._is_pressed = False
         self._is_pressed_before = False
+        self._is_released_before = False
+        
         Window._root.bind("<KeyPress>", self._keyPress)
         Window._root.bind("<KeyRelease>", self._keyRelease)
     
@@ -104,7 +106,7 @@ class KeyBoard:
     
     def _keyRelease(self, event):
         self._is_pressed = False
-        self._is_pressed_before = True
+        self._is_released_before = True
         
     @property
     def key(self) -> str:
@@ -314,7 +316,8 @@ def mouseDragged(func):
 def keyPressed(func):
     def _reg(*args, **kwargs):
         def tmp():
-            if _keyboard.isPressed:
+            if _keyboard.isPressed and not _keyboard._is_pressed_before:
+                _keyboard._is_pressed_before = True
                 _executor.submit(lambda:func(*args, **kwargs))
         Window.CANVAS().bind("<KeyPressed>", tmp())
     return _reg
@@ -322,7 +325,8 @@ def keyPressed(func):
 def keyReleased(func):
     def _reg(*args, **kwargs):
         def tmp():
-            if _keyboard._is_pressed_before and not _keyboard.isPressed:
+            if _keyboard._is_released_before:
+                _keyboard._is_released_before = False
                 _executor.submit(lambda:func(*args, **kwargs))
         Window.CANVAS().bind("<KeyRelease>", tmp())
     return _reg
