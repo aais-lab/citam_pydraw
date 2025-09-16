@@ -333,8 +333,7 @@ def keyReleased(func):
 
 # callable function
 def windowMaxSize(width: int, height: int) -> None:
-    global MAX_WIDTH, MAX_HEIGHT
-    MAX_WIDTH, MAX_HEIGHT  = width, height
+    Window._max_width, Window._max_height  = width, height
 
 def colorMode(colorMode: str) -> None:
     if colorMode not in ["HSV", "RGB"]:
@@ -471,7 +470,7 @@ class Window:
     def size(self, width: int, height: int) -> 'Window':
         if Window._max_width < width or Window._max_height < height:
             if not _Config.IS_ALL_TRACE : _TraceBack()
-            raise ValueError(f"指定されたウィンドウサイズ(width:{width}, height:{height})は上限を超えています。width:{MAX_WIDTH}, height:{MAX_HEIGHT}以下で設定してください。\nウィンドウサイズをより大きくしたい場合は、windowMaxSize関数を使用して上限サイズを変更してください。") from None
+            raise ValueError(f"指定されたウィンドウサイズ(width:{width}, height:{height})は上限を超えています。width:{Window._max_width}, height:{Window._max_height}以下で設定してください。\nウィンドウサイズをより大きくしたい場合は、windowMaxSize関数を使用して上限サイズを変更してください。") from None
         Window._canvas_height, Window._canvas_width = height, width
         
         Window._root.geometry('{}x{}+0+0'.format(str(Window._canvas_width), str(Window._canvas_height)))
