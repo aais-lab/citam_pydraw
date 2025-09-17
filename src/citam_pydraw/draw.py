@@ -440,7 +440,7 @@ class Window:
     _tag :Final = "onCanvas"
     _instance = None
     
-    def __new__(cls):
+    def __new__(cls, width: int =500, height: int =500, background: str ="white"):
         if not cls._instance:
             cls._instance = super(Window, cls).__new__(cls)
         return cls._instance
