@@ -241,8 +241,6 @@ class NotFoundFunction(Exception):
 class LoadingException(Exception):
     pass
 
-class EnvironmentException(Exception):
-    pass
 
 class ProcessingIsLaggy(Exception):
     pass
@@ -543,6 +541,7 @@ class Figure:
         return self
         
     def outlineFill(self, color: str):
+        _checkColor(color)
         self.outline_color = color
         Window.CANVAS().itemconfigure(self.figure, outline=self.outline_color)
         return self
