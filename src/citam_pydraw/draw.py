@@ -37,6 +37,15 @@ class _Config:
     COLOR_CORD: Pattern[str] = compile('^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$')
     FONTS = None
 
+class Config:
+    @staticmethod
+    def COLOR_MODE():
+        return _Config.COLOR_MORD
+    
+    @staticmethod
+    def RATE():
+        return _Config.RATE
+
 # Date Class（Singleton）
 class Date:
     _instance = None
@@ -816,7 +825,7 @@ class Image():
             new_img = PILImage.new("RGBA", tmp_img.size, color=(0,0,0))
             new_img.paste(tmp_img, ((new_img.width - tmp_img.width) // 2,(new_img.height - tmp_img.height) // 2), tmp_img)
         self.image_file = ImageTk.PhotoImage(tmp_img)
-        self.image = Window.CANVAS().create_image(x, y, anchor=self.anchor, image=self.image_file)
+        self.image = Window.CANVAS().create_image(x, y, anchor=self.anchor, image=self.image_file, tags=Window._tag)
     
     def getInfo(self) -> dict:
         return {self._INFO_KEYS[k]: v for k, v in vars(self).items() if k not in self._EXCLUSION_KEYS}
