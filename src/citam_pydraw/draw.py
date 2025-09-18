@@ -82,6 +82,10 @@ class Date:
     @property
     def second(self) -> int:
         return datetime.datetime.now().second
+    
+    @property
+    def milli_second(self) -> float:
+        return datetime.datetime.now().microsecond / 1000
 
 # _keyboard（Singleton）
 class KeyBoard:

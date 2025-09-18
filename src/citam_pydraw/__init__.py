@@ -3,4 +3,4 @@ from citam_pydraw.draw import *
 # from citam_pydraw.mouse import *
 # from citam_pydraw.keyboard import *
 
-__version__ = '3.2'
+__version__ = '3.2.2'
