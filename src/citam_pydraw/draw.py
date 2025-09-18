@@ -167,7 +167,8 @@ class Mouse:
     def _mousePress(self, event):
         # NOTE: macのトラックパッドだと1本が1,2本が2,3は返ってこない
         self._pressX, self._pressY = event.x, event.y
-        self._mouseButton = self._buttons[event.num-1]
+        # print(self._buttons[event.num-1])
+        self._press_button = self._buttons[event.num-1]
         self._is_pressed = True
         self._is_pressed_before = False
         
