@@ -167,7 +167,6 @@ class Mouse:
     def _mousePress(self, event):
         # NOTE: macのトラックパッドだと1本が1,2本が2,3は返ってこない
         self._pressX, self._pressY = event.x, event.y
-        # print(self._buttons[event.num-1])
         self._press_button = self._buttons[event.num-1]
         self._is_pressed = True
         self._is_pressed_before = False
@@ -533,6 +532,7 @@ class Figure:
         self._EXCLUSION_KEYS = ["figure", "_INFO_KEYS", "_EXCLUSION_KEYS"]
         
     def fill(self, color: str):
+        _checkColor(color)
         self.fill_color = color
         Window.CANVAS().itemconfigure(self.figure, fill=self.fill_color)
         return self
